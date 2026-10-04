@@ -1,0 +1,148 @@
+name: Julia Linux CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  linux:
+    name: Linux x86-64 / Julia ${{ matrix.julia }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - julia: '1.10.12'
+            series: '1.10'
+            sha256: b0c50dfe349d76ffc8580d24e0c0be623988a6d91ed57ad8b73c0137fd27bc0d
+          - julia: '1.13.1'
+            series: '1.13'
+            sha256: 0f2e18c8dea60a2c8711d089cd9612f7a8df394b89e5208096fe5867647e0908
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUTF8: '1'
+      JULIA_NUM_THREADS: '4'
+      JULIA_PKG_OFFLINE: 'true'
+      JULIA_PKG_SERVER: ''
+      JULIA_PKG_PRECOMPILE_AUTO: '0'
+      JULIA_LOAD_PATH: '@:@stdlib'
+      JULIA_DEPOT_PATH: ${{ runner.temp }}/specqr-tools/julia-depot
+      JULIA_BIN: ${{ runner.temp }}/specqr-tools/julia-${{ matrix.julia }}/bin/julia
+      CI_SOURCE: ${{ runner.temp }}/specqr/stage/SpecQR-Julia
+      CI_EVIDENCE: ${{ runner.temp }}/specqr/evidence
+      CI_TOOLS: ${{ runner.temp }}/specqr-tools
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, node24
+        with:
+          persist-credentials: false
+
+      - name: Check committed manifest and create deterministic source archive
+        id: stage
+        run: |
+          python3 scripts/prepare_ci.py stage --output "$RUNNER_TEMP/specqr"
+          mkdir -p "$CI_EVIDENCE" "$CI_TOOLS"
+          git rev-parse HEAD > "$CI_EVIDENCE/checkout-commit.txt"
+          uname -a > "$CI_EVIDENCE/host.txt"
+          cat /etc/os-release >> "$CI_EVIDENCE/host.txt"
+          python3 --version >> "$CI_EVIDENCE/host.txt"
+
+      - name: Install checksum-pinned official Julia
+        id: julia
+        if: ${{ !cancelled() && steps.stage.outcome == 'success' }}
+        env:
+          JULIA_VERSION: ${{ matrix.julia }}
+          JULIA_SERIES: ${{ matrix.series }}
+          JULIA_SHA256: ${{ matrix.sha256 }}
+        run: |
+          url="https://julialang-s3.julialang.org/bin/linux/x64/$JULIA_SERIES/julia-$JULIA_VERSION-linux-x86_64.tar.gz"
+          curl --fail --location --retry 3 --proto '=https' --tlsv1.2 "$url" -o "$CI_TOOLS/julia.tar.gz"
+          printf '%s  %s\n' "$JULIA_SHA256" "$CI_TOOLS/julia.tar.gz" | sha256sum --check
+          printf 'version=%s\nurl=%s\nsha256=%s\n' "$JULIA_VERSION" "$url" "$JULIA_SHA256" > "$CI_EVIDENCE/julia-download.txt"
+          tar -xzf "$CI_TOOLS/julia.tar.gz" -C "$CI_TOOLS"
+          "$JULIA_BIN" --startup-file=no --version | tee "$CI_EVIDENCE/julia-version.txt"
+
+      - name: Verification harness self-tests
+        if: ${{ !cancelled() && steps.stage.outcome == 'success' }}
+        run: python3 "$CI_SOURCE/scripts/test_verify_native.py" 2>&1 | tee "$CI_EVIDENCE/harness-selftests.log"
+
+      - name: Native unit, full corpus, CLI and clean offline consumers
+        if: ${{ !cancelled() && steps.stage.outcome == 'success' && steps.julia.outcome == 'success' }}
+        run: |
+          python3 "$CI_SOURCE/scripts/verify_native.py" \
+            --julia "$JULIA_BIN" --expect-version '${{ matrix.julia }}' \
+            --expect-platform linux --expect-arch x86_64 --check-bounds yes \
+            --source-archive "$RUNNER_TEMP/specqr/SpecQR-Julia-source.zip" \
+            --archive-sha256 "$(sha256sum "$RUNNER_TEMP/specqr/SpecQR-Julia-source.zip" | cut -d ' ' -f 1)" \
+            --output "$RUNNER_TEMP/specqr/native-raw" \
+            2>&1 | tee "$CI_EVIDENCE/native.log"
+
+      - name: Install test-only independent decoders and rasterizer
+        id: oracles
+        if: ${{ !cancelled() && steps.stage.outcome == 'success' && steps.julia.outcome == 'success' }}
+        run: |
+          python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), "CI wheel pins require CPython 3.12"'
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y python3-pip openjdk-17-jdk-headless librsvg2-bin
+          python3 -m pip --isolated install --disable-pip-version-check --no-cache-dir \
+            --index-url https://pypi.org/simple --only-binary=:all: --require-hashes --no-deps \
+            --target "$CI_TOOLS/python" -r "$CI_SOURCE/scripts/requirements-ci.txt"
+          curl --fail --location --retry 3 --proto '=https' --tlsv1.2 \
+            https://repo.maven.apache.org/maven2/com/google/zxing/core/3.5.4/core-3.5.4.jar \
+            -o "$CI_TOOLS/core-3.5.4.jar"
+          printf '%s  %s\n' 71de5d89341b5fcf5dd89da7f44e84d825d0e084cdf3ec77c9abe26b0f0ceb13 "$CI_TOOLS/core-3.5.4.jar" | sha256sum --check
+          dpkg-query -W python3 python3-pip openjdk-17-jdk-headless librsvg2-bin > "$CI_EVIDENCE/ubuntu-test-tool-versions.txt"
+          /usr/lib/jvm/java-17-openjdk-amd64/bin/java --version >> "$CI_EVIDENCE/ubuntu-test-tool-versions.txt"
+          /usr/bin/rsvg-convert --version >> "$CI_EVIDENCE/ubuntu-test-tool-versions.txt"
+          PYTHONPATH="$CI_TOOLS/python" python3 -c 'import importlib.metadata as m; print("zxing-cpp=" + m.version("zxing-cpp")); print("pillow=" + m.version("pillow"))' >> "$CI_EVIDENCE/ubuntu-test-tool-versions.txt"
+
+      - name: ZXing-C++ actual PNG decoding
+        if: ${{ !cancelled() && steps.oracles.outcome == 'success' }}
+        run: python3 "$CI_SOURCE/scripts/verify_decoders.py" --julia "$JULIA_BIN" --decoder cpp --python-deps "$CI_TOOLS/python" --output "$CI_EVIDENCE/decoders-cpp.json" 2>&1 | tee "$CI_EVIDENCE/decoders-cpp.log"
+
+      - name: ZXing Java actual PNG and matrix decoding
+        if: ${{ !cancelled() && steps.oracles.outcome == 'success' }}
+        run: python3 "$CI_SOURCE/scripts/verify_decoders.py" --julia "$JULIA_BIN" --decoder java --java /usr/lib/jvm/java-17-openjdk-amd64/bin/java --jar "$CI_TOOLS/core-3.5.4.jar" --output "$CI_EVIDENCE/decoders-java.json" 2>&1 | tee "$CI_EVIDENCE/decoders-java.log"
+
+      - name: Independent SVG rasterization and PNG pixel comparison
+        if: ${{ !cancelled() && steps.oracles.outcome == 'success' }}
+        run: python3 "$CI_SOURCE/scripts/verify_render_decoders.py" --julia "$JULIA_BIN" --rasterizer /usr/bin/rsvg-convert --python-deps "$CI_TOOLS/python" --output "$CI_EVIDENCE/render-decoders.json" 2>&1 | tee "$CI_EVIDENCE/render-decoders.log"
+
+      - name: Shared regressions and strict authority vectors
+        if: ${{ !cancelled() && steps.oracles.outcome == 'success' }}
+        run: python3 "$CI_SOURCE/scripts/verify_shared_regressions.py" --julia "$JULIA_BIN" --python-deps "$CI_TOOLS/python" --output "$CI_EVIDENCE/shared-regressions.json" 2>&1 | tee "$CI_EVIDENCE/shared-regressions.log"
+
+      - name: Preserve native receipts, including failures
+        if: always()
+        run: python3 scripts/prepare_ci.py collect --native "$RUNNER_TEMP/specqr/native-raw" --output "$CI_EVIDENCE/native"
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1, node24
+        if: always()
+        with:
+          name: linux-x86_64-julia-${{ matrix.julia }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/specqr/evidence/
+            ${{ runner.temp }}/specqr/stage-report.json
+            ${{ runner.temp }}/specqr/SpecQR-Julia-source.zip
+
+  required:
+    name: Required Linux checks
+    needs: [linux]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fail unless every required Julia lane passed
+        env:
+          LINUX_RESULT: ${{ needs.linux.result }}
+        run: test "$LINUX_RESULT" = success

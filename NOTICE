@@ -1,0 +1,25 @@
+SpecQR Julia
+Copyright (c) 2026 SpecQR contributors
+
+Full-scratch Julia implementation of the user-owned SpecQR QR algorithms and
+API contracts. Runtime source uses only Julia Base and the bundled Base64
+standard library. No external Julia packages, JLL artifacts, QR wrappers,
+foreign QR code, downloaded runtime resources, FFI or network services.
+
+Behavioral owner baseline: SpecQR/SpecQR JavaScript
+15ad15e5c770ea0e39072f8f88b2733018f02ffd (3.0.0-rc.2), plus reviewed corrections
+for high-level FNC1 literal percent, consecutive group separators, Digital Link
+dot-value data loss, ambiguous resolver prefixes, finite print diagnostics and
+invalid error-correction names. Read-only reviewed Python, Pascal, Elixir and
+TypeScript implementations were used as behavioral references.
+
+QR block tables, BCH, placement and Reed-Solomon parameters are normative data.
+The 6,953-scalar QR Kanji table reproduces the owner's pinned WHATWG Shift_JIS
+first mapping. Mapping data SHA-256:
+be0a434df7babc88848f0930ceb3ea9424c6715d89ed4b1b19bcb416f9892fa8
+Digital Link implements a documented strict ASCII authority profile.
+
+Reference fixtures, Nayuki QR Code Generator, ZXing-C++, ZXing Java and SVG
+rasterizers are development-only verification resources with their own
+licenses. None is a runtime dependency. Compiler/decoder binaries are not
+included in this source package.

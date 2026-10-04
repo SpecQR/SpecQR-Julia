@@ -1,0 +1,6 @@
+# Test-only PyPI wheels. Linux x86-64 / CPython 3.12 only; no source builds.
+# Metadata: https://pypi.org/pypi/zxing-cpp/3.1.1/json
+zxing-cpp==3.1.1 --hash=sha256:9cf67341949946307d086b302cefd453fb47bc6d6ddc7d088839e9481982757b
+# Metadata: https://pypi.org/pypi/pillow/12.1.1/json
+# The manylinux_2_27/_2_28 CPython 3.12 wheel:
+pillow==12.1.1 --hash=sha256:7aac39bcf8d4770d089588a2e1dd111cbaa42df5a94be3114222057d68336bd0

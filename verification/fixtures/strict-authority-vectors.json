@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "profile": "SpecQR strict ASCII-authority Digital Link",
+  "scope": "Apply rejection only to ports that explicitly promise canonical dotted-decimal IPv4 and rejection of browser IPv4 aliases. WHATWG normalization itself may be an intentional valid contract in other ports.",
+  "reference": {
+    "standard": "https://url.spec.whatwg.org/#concept-ipv4-number-parser",
+    "implementation": "Node.js WHATWG URL",
+    "version": "v24.19.0",
+    "probeSource": "const hosts=JSON.parse(process.argv[1]);for(const host of hosts){const input=\"https://\"+host+\"/01/09506000134352\";try{const u=new URL(input);console.log(JSON.stringify({input,hostname:u.hostname,href:u.href}));}catch(e){console.log(JSON.stringify({input,error:e.code||e.name}));}}",
+    "stdoutSha256": "5a2ce070422971761a60275f8d804db64fc5af581ecbe85ed1c1d7bdc31b3ef6",
+    "note": "Local URL parsing only. No URI was fetched or visited."
+  },
+  "vectors": [
+    {
+      "id": "bare-hex-ipv4-1",
+      "host": "0x",
+      "input": "https://0x/01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "0.0.0.0",
+        "href": "https://0.0.0.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-2",
+      "host": "0X",
+      "input": "https://0X/01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "0.0.0.0",
+        "href": "https://0.0.0.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-3",
+      "host": "1.0x",
+      "input": "https://1.0x/01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "1.0.0.0",
+        "href": "https://1.0.0.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-4",
+      "host": "example.0x",
+      "input": "https://example.0x/01/09506000134352",
+      "whatwgObserved": {
+        "error": "ERR_INVALID_URL"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-5",
+      "host": "0x.",
+      "input": "https://0x./01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "0.0.0.0",
+        "href": "https://0.0.0.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-6",
+      "host": "1.0X",
+      "input": "https://1.0X/01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "1.0.0.0",
+        "href": "https://1.0.0.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-7",
+      "host": "1.2.3.0x",
+      "input": "https://1.2.3.0x/01/09506000134352",
+      "whatwgObserved": {
+        "hostname": "1.2.3.0",
+        "href": "https://1.2.3.0/01/09506000134352"
+      },
+      "strictProfileExpected": {
+        "parseError": "INVALID_GS1",
+        "normalizeError": "INVALID_GS1",
+        "validateOk": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "public-reference.jsonl.gz": {
+      "sha256": "f1649de0f2e62c87fa7b369cdd1f99bd7c092b6a1a2fa52e2e0caf5aea136f82",
+      "records": 5610
+    },
+    "internal-reference.jsonl.gz": {
+      "sha256": "140eec7223af96822572f87cf67a80b612619bde250db552c1cad83b603ae67e",
+      "records": 4576
+    }
+  }
+}
