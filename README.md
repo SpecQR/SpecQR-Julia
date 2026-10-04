@@ -1,108 +1,116 @@
 # SpecQR Julia
 
-A from-scratch QR Model 2 encoder implemented in Julia. Runtime dependencies are
-Julia Base and the bundled Base64 standard library only. No external packages,
-JLL artifacts, FFI, QR wrappers, runtime downloads, or network services.
+日本語 | [English](README.en.md) | [日本語の使い方](docs/getting-started.ja.md)
 
-## Use locally
+Julia でフルスクラッチ実装した QR Code Model 2 エンコーダーです。
+実行時に必要なのは Julia Base と同梱の Base64 標準ライブラリだけです。
+外部パッケージ、JLL、FFI、別の QR ライブラリやネットワークサービスは使いません。
+
+GitHub のソースから利用できます。パッケージの版は `0.1.0` です。
+Julia のパッケージレジストリへの登録、リリースタグ、安定版としての認定は行っていません。
+API 名とオプション名は英語のままです。
+
+## 最短の使い方
+
+Julia を用意し、リポジトリを取得して、そのルートで Julia を起動します。
+以下のシェル例は Linux で確認しています。
+
+```sh
+git clone https://github.com/SpecQR/SpecQR-Julia.git
+cd SpecQR-Julia
+julia --startup-file=no --project=.
+```
+
+Julia のプロンプトで実行します。追加パッケージのインストールは不要です。
 
 ```julia
-using Pkg
-Pkg.develop(path="/absolute/path/to/SpecQR-Julia")
 using SpecQR
 
-qr = generate("Hello, 世界 🌍"; error_correction_level="Q")
+qr = generate("こんにちは、世界 🌍"; error_correction_level="Q")
 write("hello.svg", to_svg(qr))
 write("hello.png", to_png(qr))
 println(qr.version, " / ", qr.mask_pattern)
 ```
 
-For a source-only, package-manager-free workflow:
+`hello.svg` と `hello.png` が現在のディレクトリに作成されます。
+Julia の `write` は同名ファイルを上書きします。上書きを避けたい場合は別名を使うか、
+既存ファイルを既定で拒否する下記の CLI を利用してください。
+別の Julia プロジェクトからの利用、`include` だけで読み込む方法、各機能の例は
+[日本語の入門ガイド](docs/getting-started.ja.md)を参照してください。
 
-```julia
-include("src/SpecQR.jl")
-using .SpecQR
-qr = generate("HELLO 123")
-```
+## 対応機能
 
-## Features
+- Version 1–40、誤り訂正 L / M / Q / H、8 マスクと自動選択
+- 数字、英数字、UTF-8 テキスト、任意のバイト列、漢字モード
+- 文字数フィールドと version の範囲を考慮した混在モードの最適化
+- ECI、FNC1 第1 / 第2位置、手動セグメント
+- GS1 element string、チェックディジット、限定 AI カタログ、Digital Link
+- Structured Append の分割、parity、計画、完全性を確認した再結合
+- 純 Julia による SVG、PNG、RGBA pixels、data URL
+- 容量計算、生成前の計画・見積り、診断、ECC 強化、CLI
 
-- Versions 1–40; ECC L/M/Q/H; all eight masks and deterministic auto-mask scoring
-- Numeric, alphanumeric, UTF-8 byte, binary byte, and Kanji modes
-- Optimal mixed-mode segmentation with version-band and count-field limits
-- ECI, FNC1 first/second position, explicit control segments
-- GS1 element strings, check digits, AI metadata, and strict-profile Digital Link
-- Structured Append splitting, parity, detailed planning, and validated merging
-- Pure-Julia SVG, RGBA pixels, PNG, and data URLs
-- Capacity, planning, diagnostics, ECC boosting, and CLI
-
-## Examples
-
-```julia
-plan("HELLO 123"; version=1)                 # No matrix or ECC work
-get_capacity(1, "L"; mode="numeric").maximum # 41
-
-generate(UInt8[0x00, 0xff, 0x1d]; mode="byte")
-generate_segments([Segment("eci"; assignment_number=26),
-                   Segment("byte", "日本語")])
-
-gs1 = create_gs1_element_string([(ai="01", value="09506000134352"),
-                                 (ai="10", value="BATCH%ONE")])
-generate(gs1; gs1=true)
-
-set = generate_structured_append(repeat("SPECQR ", 20); version=1)
-for (i, symbol) in enumerate(set.symbols)
-    write("part-$i.png", to_png(symbol))
-end
-```
-
-Text is strict UTF-8. Malformed Julia strings and surrogate encodings are
-rejected. Binary input preserves all byte values. ECI labels bytes; it does not
-transcode text. Text byte segments always contain UTF-8. No Unicode normalization
-is performed. Public matrix indexing is Julia-native: `matrix[y,x]` and
-`module_at(qr,x,y)` use 1-based indices. Masks remain the QR-standard values 0–7;
-Structured Append public part indices are 1–16.
+QR の読み取り機能、Micro QR、rMQR は含みません。GS1 全仕様の実装や
+ISO / GS1 認証、すべてのスキャナーでの読み取りを保証するものではありません。
 
 ## CLI
 
+リポジトリのルートで実行します。
+
 ```sh
-julia --startup-file=no bin/specqr.jl --text 'Hello 世界' --output hello.svg
-julia --startup-file=no bin/specqr.jl --stdin --binary --format png --output bytes.png
+julia --startup-file=no bin/specqr.jl --text 'こんにちは、世界' --output hello-cli.svg
 julia --startup-file=no bin/specqr.jl --text '123456789' --plan
+julia --startup-file=no bin/specqr.jl --hex 00ff1d --format png --output bytes.png
 julia --startup-file=no bin/specqr.jl --help
 ```
 
-File/stdin text retains every input byte, including NUL, CR/LF, and final newline.
-Text must be valid UTF-8. Outputs are not overwritten unless `--force` is given;
-symbolic-link output paths are rejected. Multiple input sources, duplicate
-options, unknown options, and invalid numeric settings fail explicitly.
+`--input FILE` はファイル、`--stdin` は標準入力を読みます。
+ファイル / 標準入力に `--binary` を付けると生バイトとして扱います。
+テキストの改行、末尾の改行、NUL を勝手に削除せず、不正な UTF-8 は拒否します。
+入力元は1つだけ指定してください。出力先が存在する場合は `--force` なしでは上書きせず、
+シンボリックリンクを出力先にすることも拒否します。詳細は
+[CLI の使い方](docs/getting-started.ja.md#cli-の使い方)を参照してください。
 
-## Validation and support
+## 検証済みの環境
 
-The source is portable Julia and does not artificially restrict operating
-systems. The release candidate is verified on native Linux x86_64 with official
-Julia 1.10.12 LTS and 1.13.1 stable. Windows, macOS, non-x86_64, and 32-bit lanes
-are not verified and are not claimed as tested. In particular, native Windows
-and macOS CLI Unicode filenames, raw stdio, exclusive file creation, and local
-package-consumer workflows need execution on those systems before those lanes
-can be called supported.
+ソースは可搬性を意識した Julia 実装で、OS を制限していません。
+実際に検証済みなのは **Linux x86_64 / Julia 1.10.12 LTS・1.13.1 stable** です。
+両版で 92,637 件の単体チェックと 10,186 件の参照ケース、独立デコーダーによる
+画像検証、CLI、別プロジェクトからの利用を確認しています。
+[CI](https://github.com/SpecQR/SpecQR-Julia/actions)で各コミットの結果を確認できます。
 
-See [verification](docs/verification.md),
-[native validation](docs/native-platform-validation.md), and [API](docs/api.md).
-Run local tests with `julia --project=. test/runtests.jl`; the bundled `Test` and
-`SHA` standard libraries are test-only dependencies. The Python verification
-scripts and optional independent decoders are development tools, not runtime
-requirements. There is no claim of formal ISO/GS1 certification or universal
-scanner compatibility.
+**Windows、macOS、その他のアーキテクチャ、32-bit は未検証です。**
+特に日本語ファイル名、標準入出力のバイト保持、出力ファイルの排他的作成、
+パッケージ利用は、それぞれの OS で実行するまで検証済みとは扱いません。
 
-## Deliberate bounds
+## 文字コードと制限
 
-Input caps protect planning and encoding as well as rendering: 1,000,000 input
-units, 16,384 manual segments, and 7,089 scalars for single-symbol optimization.
-Normal QR capacity is much smaller. PNG/RGBA images are limited to 4,194,304
-pixels; SVG output and data URLs also have deterministic budgets. Digital Link
-uses an explicit ASCII-authority profile, not a browser URL parser. See the
-specific API documents for exact constraints and interoperability caveats.
+- テキストは厳密な UTF-8 として扱い、不正な文字列やサロゲート符号化を拒否します。
+  Unicode 正規化は行いません。任意のバイト列は `UInt8` 配列で渡せます。
+- ECI はバイトの解釈を示すラベルであり、文字コードを変換しません。
+  テキストの byte セグメントは常に UTF-8 です。
+- 行列は `matrix[y, x]`、`module_at(qr, x, y)` は1始まりです。
+  QR のマスク番号は 0–7、Structured Append の公開部番号は 1–16 です。
+- 入力や出力に資源上限があります。入力は通常最大 1,000,000 文字またはバイト、
+  手動セグメントは最大 16,384 個、単一シンボルの厳密な最適化は最大 7,089 Unicode scalar です。
+  実際の QR 容量はこれより小さく、モードや誤り訂正によって変わります。
+- PNG / RGBA は最大 4,194,304 pixels です。PNG は stored-DEFLATE を使うため、
+  汎用圧縮器を使う PNG より大きくなります。SVG と data URL にも出力上限があります。
+- GS1 Digital Link は明示した ASCII authority の範囲を扱います。
+  ブラウザーの URL 処理全体や IDNA 変換との互換は提供しません。
 
-MIT license. This directory is source, tests, and documentation; publication
-status is tracked separately from platform validation.
+## ドキュメントとテスト
+
+- [日本語の使い方](docs/getting-started.ja.md): 導入、画像生成、GS1、分割、CLI、エラー対応
+- [English README](README.en.md)
+- [API の詳細（英語）](docs/native-api.md)、[API 概要（英語）](docs/api.md)
+- [GS1 / Digital Link の範囲（英語）](docs/gs1.md)、[描画とサイズ（英語）](docs/rendering.md)
+- [検証方法（英語）](docs/verification.md)、[OS ごとの検証手順（英語）](docs/native-platform-validation.md)
+- [CI の構成（英語）](docs/ci.md)
+
+```sh
+julia --startup-file=no --project=. test/runtests.jl
+```
+
+`Test` と `SHA` は Julia 同梱のテスト用標準ライブラリです。
+Python の検証スクリプトや独立デコーダーは開発時の検証用で、
+SpecQR の実行時依存ではありません。ライセンスは [MIT](LICENSE) です。
