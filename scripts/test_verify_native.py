@@ -226,5 +226,11 @@ class HarnessTests(unittest.TestCase):
         self.assertIn("error", recorder.receipts[0])
 
 
+def load_tests(loader, tests, pattern):
+    import test_verification_client
+    tests.addTests(loader.loadTestsFromModule(test_verification_client))
+    return tests
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

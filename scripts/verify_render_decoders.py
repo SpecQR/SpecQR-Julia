@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import base64,hashlib,json,pathlib,subprocess,sys,urllib.parse,xml.etree.ElementTree as ET,os,io
-from verification_support import PKG,execute,snapshot,digest,julia_command
+from verification_support import PKG,execute,finish_clients,snapshot,digest,julia_command
 import argparse
 ROOT=PKG.parent
 if not __debug__:raise SystemExit("Use Python without -O/PYTHONOPTIMIZE.")
@@ -16,6 +16,7 @@ def main():
  for version in [1,2,7,10,27,40]:
   for ecc in 'LMQH':requests.append({'text':'HELLO','options':{'version':version,'errorCorrectionLevel':ecc,'maskPattern':(version+ord(ecc))%8,'scale':3},'pngScale':3,'renders':True})
  binary=opts.julia.resolve()
+ opts.output.write_text(json.dumps({'status':'running'})+'\n')
  report={'status':'running','sourceSha256':snapshot(),'juliaExecutableSha256':digest(binary),'cases':0,'svgPngDecodes':0,'directPngDecodes':0,'dataUrlRoundTrips':0,'pillowVersion':PIL.__version__,'zxingCppVersion':importlib.metadata.version('zxing-cpp')}
  converter=opts.rasterizer.resolve()
  env=os.environ.copy();env['LD_LIBRARY_PATH']=str(converter.parents[1]/'lib/x86_64-linux-gnu')+os.pathsep+env.get('LD_LIBRARY_PATH','')
@@ -35,7 +36,15 @@ def main():
     assert decoded is not None and decoded.valid and decoded.bytes==b'HELLO',req
     report[kind]+=1
    report['cases']+=1
+  finish_clients(report)
+  report['sourceStable']=snapshot()==report['sourceSha256']
+  assert report['sourceStable'],'Source changed during verification'
   report['status']='passed'
+ except BaseException as error:report.update(status='failed',error=repr(error));raise
  finally:
-  report['sourceStable']=snapshot()==report['sourceSha256'];opts.output.write_text(json.dumps(report,indent=2)+'\n')
+  finish_clients(report,raise_errors=False)
+  if 'sourceStable' not in report:
+   try:report['sourceStable']=snapshot()==report['sourceSha256']
+   except BaseException as error:report.update(sourceStable=False,sourceSnapshotError=repr(error))
+  opts.output.write_text(json.dumps(report,indent=2)+'\n')
 if __name__=='__main__':main()

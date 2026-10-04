@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent actual-PNG detection, bytes, ECI, GS1, SA metadata checks."""
 import argparse,base64,hashlib,json,pathlib,sys,subprocess,time,importlib,importlib.metadata
-from verification_support import PKG,execute,digest,snapshot,julia_command
+from verification_support import PKG,execute,finish_clients,digest,snapshot,julia_command
 ROOT=PKG.parent
 if not __debug__:raise SystemExit('Decoder verification requires Python assertions; do not use -O or PYTHONOPTIMIZE.')
 # This imports test-only decoder utilities, not an encoder runtime.
@@ -11,6 +11,7 @@ def main():
  ap=argparse.ArgumentParser();ap.add_argument('--julia',required=True);ap.add_argument('--decoder',choices=['cpp','java'],required=True);ap.add_argument('--scale',type=int);ap.add_argument('--python-deps',type=pathlib.Path);ap.add_argument('--java',type=pathlib.Path);ap.add_argument('--jar',type=pathlib.Path);ap.add_argument('--output',type=pathlib.Path,required=True);a=ap.parse_args();a.julia=str(pathlib.Path(a.julia).resolve());a.output=a.output.resolve()
  scale=a.scale or (8 if a.decoder=='cpp' else 3)
  work=a.output.parent/f'decode-{a.decoder}-scale{scale}';work.mkdir(parents=True,exist_ok=True)
+ a.output.write_text(json.dumps({'status':'running'})+'\n')
  report={'status':'running','decoder':a.decoder,'scale':scale,'sourceSha256':snapshot(),'juliaExecutableSha256':digest(pathlib.Path(a.julia)),'counts':{},'failures':[]}
  if a.decoder=='cpp':
   if a.python_deps:sys.path.insert(0,str(a.python_deps.resolve()))
@@ -85,8 +86,15 @@ def main():
     if 'bytes' in want and found['byteSegments'] and ('text' not in want or want.get('allByteData',True)):assert b''.join(base64.b64decode(b) for b in found['byteSegments'])==want['bytes'],(name,'bytes')
     counts[route+'Decodes']+=1
   assert not report['failures'],report['failures'][:4]
+  finish_clients(report)
+  report['sourceStable']=snapshot()==report['sourceSha256']
+  assert report['sourceStable'],'Source changed during verification'
   report['status']='passed'
  except BaseException as e:report.update(status='failed',error=repr(e));raise
  finally:
-  report.update(counts=counts,sourceStable=report['sourceSha256']==snapshot());a.output.write_text(json.dumps(report,indent=2)+'\n')
+  finish_clients(report,raise_errors=False)
+  if 'sourceStable' not in report:
+   try:report['sourceStable']=snapshot()==report['sourceSha256']
+   except BaseException as error:report.update(sourceStable=False,sourceSnapshotError=repr(error))
+  report.update(counts=counts);a.output.write_text(json.dumps(report,indent=2)+'\n')
 if __name__=='__main__':main()
