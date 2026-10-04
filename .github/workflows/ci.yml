@@ -35,12 +35,17 @@ jobs:
       JULIA_PKG_SERVER: ''
       JULIA_PKG_PRECOMPILE_AUTO: '0'
       JULIA_LOAD_PATH: '@:@stdlib'
-      JULIA_DEPOT_PATH: ${{ runner.temp }}/specqr-tools/julia-depot
-      JULIA_BIN: ${{ runner.temp }}/specqr-tools/julia-${{ matrix.julia }}/bin/julia
-      CI_SOURCE: ${{ runner.temp }}/specqr/stage/SpecQR-Julia
-      CI_EVIDENCE: ${{ runner.temp }}/specqr/evidence
-      CI_TOOLS: ${{ runner.temp }}/specqr-tools
     steps:
+      - name: Initialize temporary paths
+        env:
+          JULIA_VERSION: ${{ matrix.julia }}
+        run: |
+          printf 'JULIA_DEPOT_PATH=%s\n' "$RUNNER_TEMP/specqr-tools/julia-depot" >> "$GITHUB_ENV"
+          printf 'JULIA_BIN=%s\n' "$RUNNER_TEMP/specqr-tools/julia-$JULIA_VERSION/bin/julia" >> "$GITHUB_ENV"
+          printf 'CI_SOURCE=%s\n' "$RUNNER_TEMP/specqr/stage/SpecQR-Julia" >> "$GITHUB_ENV"
+          printf 'CI_EVIDENCE=%s\n' "$RUNNER_TEMP/specqr/evidence" >> "$GITHUB_ENV"
+          printf 'CI_TOOLS=%s\n' "$RUNNER_TEMP/specqr-tools" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, node24
         with:
           persist-credentials: false
