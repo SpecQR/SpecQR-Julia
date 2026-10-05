@@ -8,6 +8,7 @@ if not __debug__:raise SystemExit("Verification requires Python assertions; do n
 sys.path.insert(0,str(a.python_deps.resolve()))
 import zxingcpp
 from decoder_support import verify_png
+from verify_gs1 import fixture,same
 
 def main():
  corpus=PKG/'verification/fixtures/expected-contract-vectors.json'
@@ -70,11 +71,16 @@ def main():
   authority=PKG/'verification/fixtures/strict-authority-vectors.json'
   strict=json.loads(authority.read_text());report['strictAuthorityFixtureSha256']=digest(authority)
   counts['strictAuthorityOperations']=0
+  current={r['id']:r['expected'] for r in fixture('current-ts-gs1-shared49.json')['cases']}
   for v in strict['vectors']:
    for op in ['parse','validate','normalize']:
     q=execute(julia_command(binary),[{'command':'digital-link-'+op,'url':v['input']}])[0]
-    if op=='validate':assert q.get('ok') is False,(v['id'],op,q)
-    else:assert q.get('code')=='INVALID_GS1',(v['id'],op,q)
+    if v['id']=='bare-hex-ipv4-4':
+     if op=='validate':assert q.get('ok') is False,(v['id'],op,q)
+     else:assert q.get('code')=='INVALID_GS1',(v['id'],op,q)
+    else:
+     name={'parse':'linkParse','validate':'linkValidate','normalize':'linkNormalize'}[op]
+     assert same(current[v['id']+':'+name],q['value'] if op=='normalize' else q),(v['id'],op,q)
     counts['strictAuthorityOperations']+=1
   finish_clients(report)
   report['sourceStable']=snapshot()==report['sourceSha256']

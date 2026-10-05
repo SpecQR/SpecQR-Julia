@@ -183,12 +183,21 @@ end
     @test !RG.validate_gs1_digital_link(raw;normalize=true).ok
     @test_throws RG.InvalidGs1Error RG.normalize_gs1_digital_link(raw;mode=missing)
     reject_hosts=("0x","0X","1.0x","example.0x","0x.","1.0X","1.2.3.0x","127.1","2130706433","0x7f000001","127.00.0.1","127.0.0.1.","256.0.0.1","example..com","-bad.example","bad-.example","a_b.example","user@example.com","%65xample.com","[fe80::1%25eth0]","例.jp","[1:2:3]","[1:2:3:4:5:6:7:8:9]","[1::2::3]","[:::1]","[1::2:]","[:1::2]","[::ffff:192.00.2.1]","[::1]suffix","[gggg::]")
+    # Every historical host input remains; accepted assertions are independently
+    # pinned to current TypeScript instead of discarding the old negative cases.
+    restored_hosts=Dict("0x"=>"0.0.0.0","0X"=>"0.0.0.0","1.0x"=>"1.0.0.0","0x."=>"0.0.0.0","1.0X"=>"1.0.0.0","1.2.3.0x"=>"1.2.3.0","127.1"=>"127.0.0.1","2130706433"=>"127.0.0.1","0x7f000001"=>"127.0.0.1","127.00.0.1"=>"127.0.0.1","127.0.0.1."=>"127.0.0.1","example..com"=>"example..com","-bad.example"=>"-bad.example","bad-.example"=>"bad-.example","a_b.example"=>"a_b.example","user@example.com"=>"user@example.com","%65xample.com"=>"example.com")
     for host in reject_hosts
         uri="https://"*host*"/01/"*gtin
-        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(uri)
-        @test_throws RG.InvalidGs1Error RG.normalize_gs1_digital_link(uri)
-        result=RG.validate_gs1_digital_link(uri)
-        @test !result.ok && result.errors[1].code=="GS1_DIGITAL_LINK_UNSUPPORTED_HOST"
+        if haskey(restored_hosts,host)
+            @test RG.parse_gs1_digital_link(uri).primary.value==gtin
+            @test RG.normalize_gs1_digital_link(uri)=="https://"*restored_hosts[host]*"/01/"*gtin
+            @test RG.validate_gs1_digital_link(uri).ok
+        else
+            @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(uri)
+            @test_throws RG.InvalidGs1Error RG.normalize_gs1_digital_link(uri)
+            result=RG.validate_gs1_digital_link(uri)
+            @test !result.ok && result.errors[1].code=="GS1_DIGITAL_LINK_UNSUPPORTED_HOST"
+        end
     end
     for host in ("[::]","[::1]","[2001:db8::1]","[1:2:3:4:5:6:7:8]","[::ffff:192.0.2.1]","127.0.0.1","EXAMPLE.COM.")
         @test RG.parse_gs1_digital_link("https://"*host*"/01/"*gtin).primary.value==gtin
@@ -198,11 +207,20 @@ end
         @test RG.validate_gs1_digital_link(root*suffix).errors[1].code=="GS1_INVALID_DIGITAL_LINK_PLACEMENT"
     end
     for suffix in ("?10=%","?x=%FF","?10=A&10=B","/17/251231","?03=A","#","#x","?10=A B","/10/%C0%AF","/10/%ED%A0%80","?x=%F4%90%80%80")
-        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(root*suffix)
-        @test !RG.validate_gs1_digital_link(root*suffix).ok
+        if suffix in ("#","?10=A B")
+            @test RG.parse_gs1_digital_link(root*suffix).primary.value==gtin
+            @test RG.validate_gs1_digital_link(root*suffix).ok
+        else
+            @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(root*suffix)
+            @test !RG.validate_gs1_digital_link(root*suffix).ok
+        end
     end
     for uri in ("https://example.com/%FF/01/"*gtin,"https://example.com:65536/01/"*gtin,"https://example.com:/01/"*gtin,"http:example.com/01/"*gtin,"ftp://example.com/01/"*gtin," https://example.com/01/"*gtin,"https://example.com\\a/01/"*gtin)
-        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(uri)
+        if occursin("%FF",uri) || occursin(":65536",uri) || startswith(uri,"ftp:")
+            @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link(uri)
+        else
+            @test RG.parse_gs1_digital_link(uri).primary.value==gtin
+        end
     end
     good=("","/","/prefix","/prefix/sub/","/./prefix","/old/../prefix","/01/../prefix","/00/../prefix","/414/../prefix","/%30%31/%2E%2E/prefix","/prefix//sub","/prefix/./sub/../end","/prefix%20space","/%E6%BC%A2","/000/010/4140","/%2530%2531","/01/../","/01/%2e%2e/00/%2e%2e/414/%2e%2e","/漢字")
     bad=("/01/prefix","/00/prefix","/414/prefix","/prefix/01","/prefix/00","/prefix/414","/%30%31/prefix","/%30%30/prefix","/%34%31%34/prefix","/0%31/prefix","/%300/prefix","/4%314/prefix","/./01/prefix","/old/../01/prefix","/01/./prefix","/prefix/%30%31/","/01/x/../prefix","/%30%31/x/%2E%2E/prefix")
@@ -223,4 +241,23 @@ end
         @test p.unknown_query[1].value==unicode
         @test RG.parse_gs1_digital_link(RG.normalize_gs1_digital_link(root*"?note="*unicode)).unknown_query[1].value==unicode
     end
+end
+
+@testset "URL authority adversarial controls" begin
+    root="/01/09506000134352"
+    for host in ("4294967296","0x100000000","1.2.3.256","1.16777216","1.2.65536","09","1.09","1.0xG.1","1.2.3.4.5","%2fexample.com","%3aexample.com","%40example.com","%5b::1%5d","%00example.com","[::ffff:999.1.1.1]","[1:2:3:4:5:6:7:8::]","[é]","[😀]","[::1é]")
+        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link("https://"*host*root)
+    end
+    for port in ("65536",repeat("9",900),"+80","8e1","0x50")
+        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link("https://example.com:"*port*root)
+    end
+    for host in ("user%FF@example.com","user%zz@example.com","%FF.com","%zz.com","例え.テスト")
+        @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link("https://"*host*root)
+    end
+    @test RG.normalize_gs1_digital_link("https://example.com/a^b"*root)=="https://example.com/a%5Eb"*root
+    @test RG.normalize_gs1_digital_link("https://u:p@ss@example.com"*root)=="https://u:p%40ss@example.com"*root
+    @test RG.normalize_gs1_digital_link("https://example.com:00000000443"*root)=="https://example.com"*root
+    @test RG.normalize_gs1_digital_link("https://[0:0:1:0:0:2:3:4]"*root)=="https://[::1:0:0:2:3:4]"*root
+    @test RG.parse_gs1_digital_link("https://example.com"*root*"?note=%00").unknown_query[1].value=="\0"
+    @test_throws RG.InvalidGs1Error RG.parse_gs1_digital_link("https://example.com"*root*"?note=\0")
 end

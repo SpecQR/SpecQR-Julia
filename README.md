@@ -114,3 +114,5 @@ julia --startup-file=no --project=. test/runtests.jl
 `Test` と `SHA` は Julia 同梱のテスト用標準ライブラリです。
 Python の検証スクリプトや独立デコーダーは開発時の検証用で、
 SpecQR の実行時依存ではありません。ライセンスは [MIT](LICENSE) です。
+
+GS1 URL の受理範囲を TypeScript の独立結果に合わせて復元しました。通常 QR の生成処理は変更していません。[変更範囲と検証](docs/url-compatibility.ja.md)。

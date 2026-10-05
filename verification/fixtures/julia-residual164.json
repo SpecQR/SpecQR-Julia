@@ -1,0 +1,832 @@
+{
+  "cases": [
+    {
+      "caseId": 149,
+      "category": "diagnostic-only",
+      "requestSha256": "b465d578065efd01a6645545c2030d0888c50f1d108e641c722f155fa374a34e"
+    },
+    {
+      "caseId": 159,
+      "category": "diagnostic-only",
+      "requestSha256": "a54cf491df5be726f8d860ea8fb60c84aa0a0ea28a456e2c361e53dfc4063acd"
+    },
+    {
+      "caseId": 169,
+      "category": "diagnostic-only",
+      "requestSha256": "11efd120c8681db4a333791fafcbdc639c9e4f0bbbc70fa3f3c1b7b70f378d42"
+    },
+    {
+      "caseId": 179,
+      "category": "diagnostic-only",
+      "requestSha256": "ffeb5d1374c96170fcd823a4ecdcea385eb8480e2ba9035c17cdb8f37c64058b"
+    },
+    {
+      "caseId": 189,
+      "category": "diagnostic-only",
+      "requestSha256": "8d97f761d8d93fbb07d3ea1ada77e479ed84c102b3f5ce1ac81599facc30641b"
+    },
+    {
+      "caseId": 199,
+      "category": "diagnostic-only",
+      "requestSha256": "7b12a9cec3c15a73660c4d3fddbe8188bf5c5b4ac3b2b23d02d026ebc353a94c"
+    },
+    {
+      "caseId": 209,
+      "category": "diagnostic-only",
+      "requestSha256": "34d2582406ddb66626309d14d02baf98856bec2acccc86b5f963701b40c0e09e"
+    },
+    {
+      "caseId": 219,
+      "category": "diagnostic-only",
+      "requestSha256": "22ac87c78705dc47846a99b049c79ed6224f0e7bc723b37171f36f6e50b68e9c"
+    },
+    {
+      "caseId": 229,
+      "category": "diagnostic-only",
+      "requestSha256": "d06fae380b3d7ba9f5c6523fdef78c6feeeba0fc804182a3ced70fe6531eaff4"
+    },
+    {
+      "caseId": 239,
+      "category": "diagnostic-only",
+      "requestSha256": "1c5d2b60d11bf3b6e66851e85d9f3017549f4b8f1d65ac912bffc23da5f2ce1f"
+    },
+    {
+      "caseId": 249,
+      "category": "diagnostic-only",
+      "requestSha256": "050ffc87773942e919a1a55806703793741a445cc1c0b3e0a1ec1acfb77d6c10"
+    },
+    {
+      "caseId": 259,
+      "category": "diagnostic-only",
+      "requestSha256": "2c83bfbb105f8b8f964b2b58cea6ca7573a56c68658777ad2943ef3b193f59e0"
+    },
+    {
+      "caseId": 269,
+      "category": "diagnostic-only",
+      "requestSha256": "f4cad03aee408eec7377bf2876363cdcb12d4f3ed58e4e18212f0ae92eb0a024"
+    },
+    {
+      "caseId": 279,
+      "category": "diagnostic-only",
+      "requestSha256": "73abca255f639646abb89b4ea4b5f3a077c37750a8099443fa32f372b04ad41c"
+    },
+    {
+      "caseId": 289,
+      "category": "diagnostic-only",
+      "requestSha256": "7367731215dc6a1600f9536a8d925e165db57d97ff584c1e2563989e120e5b70"
+    },
+    {
+      "caseId": 299,
+      "category": "diagnostic-only",
+      "requestSha256": "8cba58b7e560d6609f2e6701c2c7298fbb21cc426daf2328d9e1181503640585"
+    },
+    {
+      "caseId": 309,
+      "category": "diagnostic-only",
+      "requestSha256": "1e1f4b9543aa0860d8fddf17a1a78c950d19d653270350c2dc998f70181a83de"
+    },
+    {
+      "caseId": 319,
+      "category": "diagnostic-only",
+      "requestSha256": "88735aaa7d5c1f63e53c658ae5c5987f5d66a2b1dce62456644e81eaf3fc93aa"
+    },
+    {
+      "caseId": 329,
+      "category": "diagnostic-only",
+      "requestSha256": "f451678da2121850bbf40b8da36bf86e005d4d2f1a2724c46088b11d5161f1ce"
+    },
+    {
+      "caseId": 339,
+      "category": "diagnostic-only",
+      "requestSha256": "cc01087046866c56368f27b05806fddaeed748caab44f2aabdedd60c695e727c"
+    },
+    {
+      "caseId": 349,
+      "category": "diagnostic-only",
+      "requestSha256": "688d11a9f1bdacf248a65aa14a376fd454c01f830648dae145f3c9b937f70e84"
+    },
+    {
+      "caseId": 359,
+      "category": "diagnostic-only",
+      "requestSha256": "92a27cd1917f2a6fdea18f00134bb050df00b7715e996bdb933ea289c4c39efe"
+    },
+    {
+      "caseId": 369,
+      "category": "diagnostic-only",
+      "requestSha256": "18918a63d99ccad4a949759ada806deb5fcf7bc5526d075cbd76049ffb71ae56"
+    },
+    {
+      "caseId": 379,
+      "category": "diagnostic-only",
+      "requestSha256": "c3b8b234a2076e1c711b39374be0cd3deb019f2a9cce0459c75983125cf15d60"
+    },
+    {
+      "caseId": 389,
+      "category": "diagnostic-only",
+      "requestSha256": "c58d1f40a78e8627165858e6c8f30f1a0bf37bc9f98a5aab8b92c9d9db2c1f37"
+    },
+    {
+      "caseId": 399,
+      "category": "diagnostic-only",
+      "requestSha256": "b02e26303b5aa1d811e0d9500732ab9ca1508c862faafef68535fa5e38177aa3"
+    },
+    {
+      "caseId": 409,
+      "category": "diagnostic-only",
+      "requestSha256": "083f3c7e57136e2cb753e687e0deb5cd1980a02aaa56780b4c7fdb783e153c61"
+    },
+    {
+      "caseId": 419,
+      "category": "diagnostic-only",
+      "requestSha256": "1f71c25453f19efc4270ca0bdf6d05ee65cea70c174307d3b01b2da0397a6bd6"
+    },
+    {
+      "caseId": 429,
+      "category": "diagnostic-only",
+      "requestSha256": "a029fb5146c2f2d4cbf7be947f93607e16aafd3a2ce1f668b54885b3b90bb00f"
+    },
+    {
+      "caseId": 439,
+      "category": "diagnostic-only",
+      "requestSha256": "6c46bac1243721fe4a943dca392720e4e55b4c4d428f5f69348ab44ef3713149"
+    },
+    {
+      "caseId": 449,
+      "category": "diagnostic-only",
+      "requestSha256": "7f7ec2d4ff65f0a79fae4c014d6f2f0434e716e91a0cffff827d21b5fa4b896d"
+    },
+    {
+      "caseId": 459,
+      "category": "diagnostic-only",
+      "requestSha256": "d951ed6ff423a84bffa59ce66ed073fb9bc0804a7c3754ecb6d69c4362a5b4e1"
+    },
+    {
+      "caseId": 469,
+      "category": "diagnostic-only",
+      "requestSha256": "0932fb105a9e169cb11ce7c5c217c6f3b669e0d3fbc52e13f5a4cd2bb38735a7"
+    },
+    {
+      "caseId": 479,
+      "category": "diagnostic-only",
+      "requestSha256": "44c052749bab9f2e7083c5440c2f34a5a8b079efb402dd51f7bf5f111e1107b4"
+    },
+    {
+      "caseId": 489,
+      "category": "diagnostic-only",
+      "requestSha256": "b349d2f469bcec47a10f613f8f6d68f2494347dab87f35b6a9fd6b556bb8b03e"
+    },
+    {
+      "caseId": 499,
+      "category": "diagnostic-only",
+      "requestSha256": "05381b2345cb4934d9b75c2c15b1e3a5508c40416f4fba2a5007836963abcf11"
+    },
+    {
+      "caseId": 509,
+      "category": "diagnostic-only",
+      "requestSha256": "2e96b69e5f54e77eaa2caa4bcba1a947994308ab7d590968e42dcec71901e28b"
+    },
+    {
+      "caseId": 519,
+      "category": "diagnostic-only",
+      "requestSha256": "56281c41064c42228c4d37e87d6e3c3571d7c33df2e1941f1276d1ca53feaf2c"
+    },
+    {
+      "caseId": 529,
+      "category": "diagnostic-only",
+      "requestSha256": "8469c7732c2da57acaf60c19b578d0b6ad6c3b7b65c52f5d817ddb3d50d8eb3b"
+    },
+    {
+      "caseId": 539,
+      "category": "diagnostic-only",
+      "requestSha256": "dc4ce1c55fc4e8f2462dfc7c2860fdbc7fcf5de0c6fb106f9becc345a57fb5c8"
+    },
+    {
+      "caseId": 549,
+      "category": "diagnostic-only",
+      "requestSha256": "f19c49d5c509d32a268ab3ca6d0d8c0b0de715cf359f888273c45274c16ca8db"
+    },
+    {
+      "caseId": 559,
+      "category": "diagnostic-only",
+      "requestSha256": "a6186e98b96c527fb50f4993154a70cb3c05f504d90f26b82438fce0be799911"
+    },
+    {
+      "caseId": 569,
+      "category": "diagnostic-only",
+      "requestSha256": "d6bacdce6245d843caef0323eb508253b5daf407282c8b10b482e4989e010b44"
+    },
+    {
+      "caseId": 579,
+      "category": "diagnostic-only",
+      "requestSha256": "577b31cb4bf2f3668437e695e0d6d3bd7cc6ece1857971776ca1a2d496c01e2d"
+    },
+    {
+      "caseId": 589,
+      "category": "diagnostic-only",
+      "requestSha256": "34ec628f81d8a98ee468d00337f72ec7789781e804c02a2911a67cf9e301d2dd"
+    },
+    {
+      "caseId": 599,
+      "category": "diagnostic-only",
+      "requestSha256": "80c4895bd429e47f7571bd1052432621d95d300e45ff9f749da1174a52ba365f"
+    },
+    {
+      "caseId": 609,
+      "category": "diagnostic-only",
+      "requestSha256": "9f21aaf74074c1b955aa5499dfdc0b1f30b655c1e83da3dd116fa105ee98dd1d"
+    },
+    {
+      "caseId": 619,
+      "category": "diagnostic-only",
+      "requestSha256": "74e259d058bb7ff4940078f793be41f9dd6349baa78a0cd146268fb06947b478"
+    },
+    {
+      "caseId": 629,
+      "category": "diagnostic-only",
+      "requestSha256": "e233a0b458921ba382ec73aac93b5ac30a735522e8cf490e4dfb7d77cec83cdb"
+    },
+    {
+      "caseId": 639,
+      "category": "diagnostic-only",
+      "requestSha256": "950d50a0646eefce6be8c1fcafa16af6d77d007ea059cd4b2fbf8fdd18d66825"
+    },
+    {
+      "caseId": 649,
+      "category": "diagnostic-only",
+      "requestSha256": "a68d14536cb843de87ae65ac93eb39321a2e0b084b97cd0791f8256fad0554e4"
+    },
+    {
+      "caseId": 654,
+      "category": "diagnostic-only",
+      "requestSha256": "d3aaab0352284fc495890155d570cc69b44d290bd8f40597c8b4ca43683193d3"
+    },
+    {
+      "caseId": 659,
+      "category": "diagnostic-only",
+      "requestSha256": "e2200516b49196d30e2b8a7cc94fdae20d5de4912d9b6c5e64abff46e68cb56e"
+    },
+    {
+      "caseId": 664,
+      "category": "diagnostic-only",
+      "requestSha256": "642ef1302217411e63c52da1fdc1501306012c5e5ba9d9188b85b9bc899273e5"
+    },
+    {
+      "caseId": 669,
+      "category": "diagnostic-only",
+      "requestSha256": "92c6ee880ead551aa41fdaa27b18a8fb51855d72f1d71be3912f76700a9329c6"
+    },
+    {
+      "caseId": 674,
+      "category": "diagnostic-only",
+      "requestSha256": "4c745df1c8ea756ed8a0ce10a5c8b754955dc56119f1fd7a5922f292a18af902"
+    },
+    {
+      "caseId": 686,
+      "category": "diagnostic-only",
+      "requestSha256": "8c401f211d469b0331b4b1d069af98c53279fbb82cbec87bda130b0aad98a17e"
+    },
+    {
+      "caseId": 690,
+      "category": "diagnostic-only",
+      "requestSha256": "49a07df7b1ec1f09c410d3b362384c41f6f02e3e3d4ef336afa47dfc2896684c"
+    },
+    {
+      "caseId": 694,
+      "category": "diagnostic-only",
+      "requestSha256": "41144f3cfaf9027b918b44c4d4fad9c67868f75b8c4823e47f2397d227212dac"
+    },
+    {
+      "caseId": 698,
+      "category": "diagnostic-only",
+      "requestSha256": "cf5262a7de8d1d1779c7df476688a2439f2e4e035cc9cf8769c6709e9db3003a"
+    },
+    {
+      "caseId": 702,
+      "category": "diagnostic-only",
+      "requestSha256": "4e10adbc36ea68de981f3003649fb494b0106d792e6e4246a0243e5b7c2d0b2f"
+    },
+    {
+      "caseId": 706,
+      "category": "diagnostic-only",
+      "requestSha256": "c91f3167745f26187260ce2787df16aa72f34c428d7cdd6e856e7f01f95c4872"
+    },
+    {
+      "caseId": 710,
+      "category": "diagnostic-only",
+      "requestSha256": "fd60aba84264c7c843bf30e423235808af89fbb590b8af81b9bc89b2d990a089"
+    },
+    {
+      "caseId": 714,
+      "category": "diagnostic-only",
+      "requestSha256": "c6fea964578a11e7955c9e423a636fa89e4f3839ac753591add3d3740cd5df44"
+    },
+    {
+      "caseId": 718,
+      "category": "diagnostic-only",
+      "requestSha256": "d703015e546d1de70e62ce5a54d47edcf5d1ed66904e131e2db2a8c7660e7d21"
+    },
+    {
+      "caseId": 722,
+      "category": "diagnostic-only",
+      "requestSha256": "a2e5bd7cc791f81a72bd7ef3fcaff1b3a5d49bc1f7dacb22faa92ef853d174cf"
+    },
+    {
+      "caseId": 726,
+      "category": "diagnostic-only",
+      "requestSha256": "4a6032768dc53e0ab5cddfbff7b15760c83c279574459d4ef4d738e4b093be8a"
+    },
+    {
+      "caseId": 730,
+      "category": "diagnostic-only",
+      "requestSha256": "3070060a251b97d3484862db62c17a7294df7bc2a9fcfbc59b5e301d66542e42"
+    },
+    {
+      "caseId": 734,
+      "category": "diagnostic-only",
+      "requestSha256": "fde8ace02f78e04bc1c121b4f231d72257c271296a6218202e65be7eaa8ceb12"
+    },
+    {
+      "caseId": 738,
+      "category": "diagnostic-only",
+      "requestSha256": "0defe28c1d73c5f1c1aa1671222537df9de9a1c02e6366b06ec1b6d1ca2b21ae"
+    },
+    {
+      "caseId": 741,
+      "category": "accepted-to-rejected",
+      "requestSha256": "4bbd6c2df69dda0b3ee27d62f256fe427a55b08fbb9eeee850f60980b5065c16"
+    },
+    {
+      "caseId": 742,
+      "category": "diagnostic-only",
+      "requestSha256": "b27840dcadfdb61f42c23c1ae92ffe4e256b90ed9b0732c6a04b7ccda7e8eda7"
+    },
+    {
+      "caseId": 746,
+      "category": "diagnostic-only",
+      "requestSha256": "4276cc0d480cbba37f1cbf411393a90f8077257aa6e1630e0d368e633f03b2f8"
+    },
+    {
+      "caseId": 750,
+      "category": "diagnostic-only",
+      "requestSha256": "313a4b7c5950daad4db65dd5963c20b1a5941f7744d46fb50513aaab6814a8dc"
+    },
+    {
+      "caseId": 754,
+      "category": "diagnostic-only",
+      "requestSha256": "30d46368a85dc32314445e76568187f34b0487bf0d3da1a49b2313fb82a41168"
+    },
+    {
+      "caseId": 758,
+      "category": "diagnostic-only",
+      "requestSha256": "d73525ff4b0336c357b9bb2b998a93d7354b94fefcfb0d5f279b629e72f53839"
+    },
+    {
+      "caseId": 761,
+      "category": "accepted-to-rejected",
+      "requestSha256": "13aa7f296cb7158706bd276e9ba146698f408e7815d60e43b817e13318e2cacb"
+    },
+    {
+      "caseId": 762,
+      "category": "diagnostic-only",
+      "requestSha256": "e6238224739221dc38ea62727968af359b669abc14fd57f9984b32b51df4f997"
+    },
+    {
+      "caseId": 768,
+      "category": "diagnostic-only",
+      "requestSha256": "c3866f89c1491c26334656e7a8b5868b46896b9474f1515e63538ece9d1a023e"
+    },
+    {
+      "caseId": 777,
+      "category": "diagnostic-only",
+      "requestSha256": "c24de6e7ac571fb93e100b44542163ef790859982e26c1e812ea70dc92ff8847"
+    },
+    {
+      "caseId": 786,
+      "category": "diagnostic-only",
+      "requestSha256": "c19c7047ed8d51c4191d8651dda64451a7a6fb5c9ebe21a5ffb3c8d7a12cecb1"
+    },
+    {
+      "caseId": 795,
+      "category": "diagnostic-only",
+      "requestSha256": "343ab36178200d6e3f59bc639213d75772b5a7fa9985e9cad6266dc31e5718b2"
+    },
+    {
+      "caseId": 804,
+      "category": "diagnostic-only",
+      "requestSha256": "1e6961565c03db2abaf3a2354545638db3b09537883dcf1c9c84543cc0b8cb48"
+    },
+    {
+      "caseId": 813,
+      "category": "diagnostic-only",
+      "requestSha256": "bbc911cf9e8fb85c645cd57e2e00a9b5af38ab2606e3474d6ceead8942d916da"
+    },
+    {
+      "caseId": 822,
+      "category": "diagnostic-only",
+      "requestSha256": "dec74f6d44eef137fddcdf9e5956a8df3e6091081b5af09d8d1fcf830c1f5819"
+    },
+    {
+      "caseId": 831,
+      "category": "diagnostic-only",
+      "requestSha256": "1dd898cc371254d6df9bb23ceae77fbb42fbc790e577fa023ab6cc5b25ff5c3f"
+    },
+    {
+      "caseId": 838,
+      "category": "diagnostic-only",
+      "requestSha256": "7a892794dab0ce9e94d253b00d862e8c74c8d5dd4abd4bc7dc42dd3de3d2c690"
+    },
+    {
+      "caseId": 839,
+      "category": "diagnostic-only",
+      "requestSha256": "47cd83dc11c0f124dc7476e7a9df7fb821ba9f736b5c27a5f6bf6699f0f40354"
+    },
+    {
+      "caseId": 840,
+      "category": "diagnostic-only",
+      "requestSha256": "d5b0e78778698cf7a96dc2ce9b03329883e77408a5ccd759290d32c606c4a6f1"
+    },
+    {
+      "caseId": 847,
+      "category": "diagnostic-only",
+      "requestSha256": "5b7497401bc742e678950a83d9402847104c28f8d165dd814002e65d810e2397"
+    },
+    {
+      "caseId": 848,
+      "category": "diagnostic-only",
+      "requestSha256": "ad52e67d130b1718c7f895b2dab8fd69d8cfdbcd0b8d5fb2609adab90576c4e4"
+    },
+    {
+      "caseId": 849,
+      "category": "diagnostic-only",
+      "requestSha256": "d8cc9ec00ed508c5e4b1ed6f19640cfa3363ba73fadcff898e992d91f533ce4d"
+    },
+    {
+      "caseId": 867,
+      "category": "diagnostic-only",
+      "requestSha256": "c4bd724e90a40c8d6bcbbacf22eae63ec328f8a86a7746ed9b6428e4b3dfce9e"
+    },
+    {
+      "caseId": 874,
+      "category": "diagnostic-only",
+      "requestSha256": "d147cda9d3a6f9958e0115885e6e4b92abab61d4a3715c00602160f7b4e8d69c"
+    },
+    {
+      "caseId": 875,
+      "category": "diagnostic-only",
+      "requestSha256": "085d561aec5df96fb34a4469f237cc915c88dacda4d8d1dc12eb6373b6f6b537"
+    },
+    {
+      "caseId": 876,
+      "category": "diagnostic-only",
+      "requestSha256": "41622828fa24c4cec262a0fea68828c9d0bd6d68152dbfe0d8bafc44634e94e8"
+    },
+    {
+      "caseId": 880,
+      "category": "accepted-to-rejected",
+      "requestSha256": "cd0109fd81eac2e4cb4b7573b473b6193e8936b4c552d6f06bb72341bf32a2cd"
+    },
+    {
+      "caseId": 883,
+      "category": "accepted-to-rejected",
+      "requestSha256": "bcee5b3f4d7d2ed40399960741fe1962e6e7b7a260bd9d7319e5d468c8b4cbe1"
+    },
+    {
+      "caseId": 884,
+      "category": "diagnostic-only",
+      "requestSha256": "f64a56f99d6793a38f6de6d2d0a16f0ff9535799f2cadce27a0b63922c6a71d0"
+    },
+    {
+      "caseId": 885,
+      "category": "diagnostic-only",
+      "requestSha256": "ed334bcc8f545839330b296670ca936ddbed2e0ae7f727bdb31e1f9b15690183"
+    },
+    {
+      "caseId": 886,
+      "category": "accepted-to-rejected",
+      "requestSha256": "243fb1d318597624c13c66a15aa0de3a4353aa695b7a3ca0fb009517ae2f4bcf"
+    },
+    {
+      "caseId": 889,
+      "category": "accepted-to-rejected",
+      "requestSha256": "6fd165bc267523877f180e2626edd9cb38a8d42b350e97d8bf4b9d27bc7202c4"
+    },
+    {
+      "caseId": 912,
+      "category": "diagnostic-only",
+      "requestSha256": "8cb8c50ae3d55c7260d0ec302a226dfe1cbad95b469242a5ef69ad0bd176ffd9"
+    },
+    {
+      "caseId": 930,
+      "category": "diagnostic-only",
+      "requestSha256": "b60576539a251d3ee0781a33b17ea3ad2a95c8fba3fef3dbe7bdb4bf941c298f"
+    },
+    {
+      "caseId": 939,
+      "category": "diagnostic-only",
+      "requestSha256": "e852ec79635cccb3c49842bf1841a65c98a021abca385123aafc3d872c848b7c"
+    },
+    {
+      "caseId": 948,
+      "category": "diagnostic-only",
+      "requestSha256": "362ef169a86735943e66bcb6c4bbe2b97a5943de52b5abb3ab98ebc732442647"
+    },
+    {
+      "caseId": 957,
+      "category": "diagnostic-only",
+      "requestSha256": "5b1ba9d004c78f5db465485138961b738caa7d20b52f685b60d83baef39fe43b"
+    },
+    {
+      "caseId": 966,
+      "category": "diagnostic-only",
+      "requestSha256": "963ab805fe1947454b6a5c3ba8412d563d4555075e2192c732237f8e0a19d59e"
+    },
+    {
+      "caseId": 975,
+      "category": "diagnostic-only",
+      "requestSha256": "45ac6fbaf973426f5c20e25b442d0c35efc27ca3033096a2f8f765af9201deb9"
+    },
+    {
+      "caseId": 982,
+      "category": "diagnostic-only",
+      "requestSha256": "df6601eb54cad864ee6fb0e43655c875e13c9cb9a4366d6ef54ebdde0f0a0058"
+    },
+    {
+      "caseId": 983,
+      "category": "diagnostic-only",
+      "requestSha256": "1b2a8b59cf2877e69b3c48a3d345bcc0f24ba6e1ea32a842c49abfb7eac07c2d"
+    },
+    {
+      "caseId": 984,
+      "category": "diagnostic-only",
+      "requestSha256": "6ad140ec1a5b5206613d4110bbfbf10e81491fc14b5c5930d03e5312e100cc77"
+    },
+    {
+      "caseId": 1002,
+      "category": "diagnostic-only",
+      "requestSha256": "4db6dc992ea23922497ec6c554ca923886a58dbe64ecdded5e77f97645a87fef"
+    },
+    {
+      "caseId": 1038,
+      "category": "diagnostic-only",
+      "requestSha256": "da82c5956cc7e018724c05638126987f81d08c6139f030bbed03ea55b83030d8"
+    },
+    {
+      "caseId": 1047,
+      "category": "diagnostic-only",
+      "requestSha256": "0fe91748627ad9aab23af60c24f22a3567e49d5ad671c206d5cb58d2d35b462c"
+    },
+    {
+      "caseId": 1056,
+      "category": "diagnostic-only",
+      "requestSha256": "fee9de5f67b7401c7a6c075045c7c91590c43422d05347a70d90c9e0d8f89841"
+    },
+    {
+      "caseId": 1060,
+      "category": "accepted-to-rejected",
+      "requestSha256": "33a36aac207855bed2b3ce9b3d66e3216908214349e27afcf9b67b9b1221aea5"
+    },
+    {
+      "caseId": 1061,
+      "category": "accepted-to-rejected",
+      "requestSha256": "c0b9c142ace4be0b6e4a4dee5f9e0c89ad23e12e8c57857127f214caee239743"
+    },
+    {
+      "caseId": 1063,
+      "category": "accepted-to-rejected",
+      "requestSha256": "0280bad16ae8d537397e01dbc1f39169ac8db66a563aadec0bde4a666d5de72f"
+    },
+    {
+      "caseId": 1064,
+      "category": "accepted-to-rejected",
+      "requestSha256": "bc549671a2e3c003477cd3b2a129a1e6c9df641734b3f137ff7dbd71e1e31912"
+    },
+    {
+      "caseId": 1065,
+      "category": "diagnostic-only",
+      "requestSha256": "3e3f96b8c7671e9ae0ec09750b42051a75b66a110d977fe60f5a45fe29ee0ac8"
+    },
+    {
+      "caseId": 1066,
+      "category": "accepted-to-rejected",
+      "requestSha256": "cc564f8349e0f6ad32737a62418205597351710fa40c6eb56503e916035fedef"
+    },
+    {
+      "caseId": 1067,
+      "category": "accepted-to-rejected",
+      "requestSha256": "269f8d40b4673dff6d366114f40d675ca3f5b60517ea57e89848ac2bb1c90a7d"
+    },
+    {
+      "caseId": 1155,
+      "category": "rejected-to-accepted",
+      "requestSha256": "03c505a9cf034686e395216a3630d56d646adc36f39a3c51c602410504b1a41f"
+    },
+    {
+      "caseId": 1157,
+      "category": "rejected-to-accepted",
+      "requestSha256": "d4b3a5ee4c8a640e1654a003d737a0b79a8e7110e806c4671b6121c817888fa8"
+    },
+    {
+      "caseId": 1173,
+      "category": "diagnostic-only",
+      "requestSha256": "4f3cca5d8f58efeee75c2372eeafbf579cffbc3af5fd8d249422de8c0b16dc9d"
+    },
+    {
+      "caseId": 1205,
+      "category": "accepted-to-rejected",
+      "requestSha256": "27bd9c4f876bc9b47ec0d96949227431cc897402c4da79391b07781fea3152ae"
+    },
+    {
+      "caseId": 1206,
+      "category": "accepted-to-rejected",
+      "requestSha256": "5f7bc4d092d1a8871863123e6ef769dd1398258923deb25d91f45fe597a7d1ea"
+    },
+    {
+      "caseId": 1207,
+      "category": "accepted-to-rejected",
+      "requestSha256": "86089c2593ecaa94b37575f6666896645f6ba4750011131754bdef0857296216"
+    },
+    {
+      "caseId": 1242,
+      "category": "diagnostic-only",
+      "requestSha256": "c1b8a171d397cdab4707152e010f90a7ab5895c892f7e01a15f4c666f0a471ce"
+    },
+    {
+      "caseId": 1245,
+      "category": "diagnostic-only",
+      "requestSha256": "ce9abd3cec2b76c5fb7c48755f51b25217a9382503abcca872bbb7db405f6fbb"
+    },
+    {
+      "caseId": 1248,
+      "category": "diagnostic-only",
+      "requestSha256": "179badc99cee049019e9b395aac81e237364067ac767efdb702e2832b9a77440"
+    },
+    {
+      "caseId": 1251,
+      "category": "diagnostic-only",
+      "requestSha256": "a5013d89ce97ef0f042794708b5d1669414ed5ffd939d35f529b5880822c4fbe"
+    },
+    {
+      "caseId": 1257,
+      "category": "diagnostic-only",
+      "requestSha256": "4741f4aa8644e1aabaaf837db168a9eeaeabd966b173705db596f0af879112cc"
+    },
+    {
+      "caseId": 1260,
+      "category": "diagnostic-only",
+      "requestSha256": "2e70ba324fda96c305ee73710d57a8c47721bbf5a05c64a0e8ba56d36371e661"
+    },
+    {
+      "caseId": 1265,
+      "category": "accepted-to-rejected",
+      "requestSha256": "b245f08a7e4ede419294f0cddde022e4d87d8582b7f2aeff1d4ef7f8c1320894"
+    },
+    {
+      "caseId": 1266,
+      "category": "accepted-to-rejected",
+      "requestSha256": "3827af578a3ef29bfcea7ca27ffa6ef71d831502ed28df735167c25cd05765e1"
+    },
+    {
+      "caseId": 1267,
+      "category": "accepted-to-rejected",
+      "requestSha256": "3a6d6ea4b000081d2c7ec13501499db2e908ee9b94b0d70579da7e8e23e6390b"
+    },
+    {
+      "caseId": 1269,
+      "category": "diagnostic-only",
+      "requestSha256": "0b5543d182352e8ba83e394ee1429c3234f1810e080146efa3f88ac1c5f84cac"
+    },
+    {
+      "caseId": 1272,
+      "category": "diagnostic-only",
+      "requestSha256": "3eef16a6c18874ba193296b8ca45037ea5a8994b7b9ea0a725118cbe5c418e7a"
+    },
+    {
+      "caseId": 1281,
+      "category": "diagnostic-only",
+      "requestSha256": "00e5f59df781025c45a8cee1048d81db708d9462fc76c405cc6fa9a8f6596b07"
+    },
+    {
+      "caseId": 1284,
+      "category": "diagnostic-only",
+      "requestSha256": "8b4b84c3028febc9c6fa243612aa3161def8a61790c84fdb21c3a9a5997e3cca"
+    },
+    {
+      "caseId": 1287,
+      "category": "diagnostic-only",
+      "requestSha256": "b0620bffae3bca0e747d9243f5fcff2227529a559ba0a832f86cb1dbc5362606"
+    },
+    {
+      "caseId": 1290,
+      "category": "diagnostic-only",
+      "requestSha256": "433e9ce08f655e801d91fab924c66f2e67ae78a0eea50f5a5351cefa010b9bf6"
+    },
+    {
+      "caseId": 1317,
+      "category": "diagnostic-only",
+      "requestSha256": "952df0c25b6d830bee82db3a0133bce5e0315b752f96fdf2948f16dc1c47cde3"
+    },
+    {
+      "caseId": 1319,
+      "category": "accepted-to-rejected",
+      "requestSha256": "d08ce81c351063ee9ec944bec47e1c794abc28567984d7778531e982cf6ec0a7"
+    },
+    {
+      "caseId": 1320,
+      "category": "accepted-to-rejected",
+      "requestSha256": "707cb57e975d2a908126b1a6f5794437e29251c602d54629e340b5f56467673d"
+    },
+    {
+      "caseId": 1321,
+      "category": "accepted-to-rejected",
+      "requestSha256": "941d09593c5dde1d8e3f2593db7349ccc1182bf262f76c9b1faeddfff9b6c1a1"
+    },
+    {
+      "caseId": 1322,
+      "category": "accepted-to-rejected",
+      "requestSha256": "c488192dcecf7d8f7bc89af9d2273a9d28146874c82a2d48e5a64ead1d8944d7"
+    },
+    {
+      "caseId": 1323,
+      "category": "accepted-to-rejected",
+      "requestSha256": "40bb163c2cd2aa5c269e7d6ff9b4ae868c7f86528a54e54bae8593654ae7d849"
+    },
+    {
+      "caseId": 1324,
+      "category": "accepted-to-rejected",
+      "requestSha256": "e37efad035fecf0478bbf693a2e7d9b27da9b7148fa23532987aeee7d26b646a"
+    },
+    {
+      "caseId": 1325,
+      "category": "accepted-to-rejected",
+      "requestSha256": "272b08d7da9b6f957c25311995f511ecd3b0002d112bb431aa6572f11deea291"
+    },
+    {
+      "caseId": 1326,
+      "category": "accepted-to-rejected",
+      "requestSha256": "a89a8376fd10fef74865b26ece16db369f5b9009e5acacbd637eb424feb6f929"
+    },
+    {
+      "caseId": 1327,
+      "category": "accepted-to-rejected",
+      "requestSha256": "393c950b0a9cdcf6c77acf7b921d60c48a7e54c65e4d6dcb8d59e2cb7d90f309"
+    },
+    {
+      "caseId": 1334,
+      "category": "accepted-to-rejected",
+      "requestSha256": "8184ce9da3499c31e07d5fed8deeeb36499138e267349fb30c1c45934116b41f"
+    },
+    {
+      "caseId": 1335,
+      "category": "accepted-to-rejected",
+      "requestSha256": "c02140cdd6976c0bca406f81abf757606270c084029ede51cf8a530dda5294b7"
+    },
+    {
+      "caseId": 1336,
+      "category": "accepted-to-rejected",
+      "requestSha256": "70d5b7c7e15b43d9c6719e73cce6e7b151de8219de36c8b6947a3dbe3fbcc28b"
+    },
+    {
+      "caseId": 1352,
+      "category": "accepted-to-rejected",
+      "requestSha256": "6fd165bc267523877f180e2626edd9cb38a8d42b350e97d8bf4b9d27bc7202c4"
+    },
+    {
+      "caseId": 1380,
+      "category": "diagnostic-only",
+      "requestSha256": "4336c5bbf6d0ec2688cca936b11f14e3f7e7b17f376ea652436c25d984cb1862"
+    },
+    {
+      "caseId": 1384,
+      "category": "diagnostic-only",
+      "requestSha256": "8c783cb885571a16013e2083f87ff27980cadae70caa3b4bc3d0ad6069a96d34"
+    },
+    {
+      "caseId": 1388,
+      "category": "diagnostic-only",
+      "requestSha256": "b18abc3f128d05bf1c97f502752051c185868f97cba5e5d854bc5a8790f613ec"
+    },
+    {
+      "caseId": 1392,
+      "category": "diagnostic-only",
+      "requestSha256": "5795be4eba3736f7ee57c8d79c5706ca307bcf63999b31ce5e75354efbf65df0"
+    },
+    {
+      "caseId": 1396,
+      "category": "diagnostic-only",
+      "requestSha256": "9232809161888559cadaab1f5c5acb6dee65cabde9922aebaf85e83824e48fdc"
+    },
+    {
+      "caseId": 1400,
+      "category": "diagnostic-only",
+      "requestSha256": "a120dd3aea6fad4bea4184741d8943911743538ba2cde88c55c3827cc9415ad9"
+    }
+  ],
+  "caseCount": 164,
+  "nulPreservedCaseIds": [
+    1331,
+    1332,
+    1333
+  ],
+  "nulDiagnosticAlignedCaseId": 1359,
+  "note": "Julia supports decoded NUL in unknown query data. This native contract is retained; raw NUL input remains rejected."
+}

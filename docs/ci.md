@@ -11,7 +11,9 @@ Both lanes run the native unit suite (92,637 checks in the reviewed baseline),
 checks, clean offline Pkg and separate direct-include consumers, and 38 harness
 self-tests. They also run ZXing-C++ 3.1.1 actual PNG decoding, ZXing Java 3.5.4
 PNG and matrix decoding, librsvg SVG rasterization/pixel comparison, and shared
-regression checks. Decoder scales are the existing reviewed defaults (C++ 8,
+regression checks. Both lanes additionally run the original 1,411 GS1 requests,
+80 independent TypeScript positive targets, all 49 authority/Digital Link
+operations and the fail-closed GS1 harness self-tests. Decoder scales are the existing reviewed defaults (C++ 8,
 Java 3); these results do not assert Java passes the default library scale 8.
 
 Only Julia Base and bundled Base64 are package runtime dependencies. CPython,

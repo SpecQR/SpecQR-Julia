@@ -125,6 +125,12 @@ jobs:
         if: ${{ !cancelled() && steps.oracles.outcome == 'success' }}
         run: python3 "$CI_SOURCE/scripts/verify_shared_regressions.py" --julia "$JULIA_BIN" --python-deps "$CI_TOOLS/python" --output "$CI_EVIDENCE/shared-regressions.json" 2>&1 | tee "$CI_EVIDENCE/shared-regressions.log"
 
+      - name: Original GS1 corpus and independent URL positives
+        if: ${{ !cancelled() && steps.stage.outcome == 'success' && steps.julia.outcome == 'success' }}
+        run: |
+          python3 "$CI_SOURCE/scripts/test_verify_gs1.py"
+          python3 "$CI_SOURCE/scripts/verify_gs1.py" --julia "$JULIA_BIN" --output "$CI_EVIDENCE/gs1/summary.json"
+
       - name: Preserve native receipts, including failures
         if: always()
         run: python3 scripts/prepare_ci.py collect --native "$RUNNER_TEMP/specqr/native-raw" --output "$CI_EVIDENCE/native"

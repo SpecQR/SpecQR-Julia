@@ -317,7 +317,7 @@ function _gs1_issue(error; element=nothing,element_index=nothing)
         found === nothing || (ai=String(found.captures[1]))
     end
     off = match(r"offset ([0-9]+)",error.message)
-    expected = code == "GS1_DIGITAL_LINK_UNSUPPORTED_HOST" ? "ASCII DNS name, canonical dotted IPv4, or RFC IPv6" : nothing
+    expected = code == "GS1_DIGITAL_LINK_UNSUPPORTED_HOST" ? "ASCII URL host or RFC IPv6; Unicode/IDNA hosts are unsupported" : nothing
     GS1ValidationIssue(code=code,message=error.message,reason=get(reasons,code,"invalid-input"),ai=ai,value=value,element_index=element_index,
         offset=off === nothing ? nothing : parse(Int,off.captures[1]),expected=expected)
 end
@@ -362,7 +362,8 @@ function validate_gs1_element_string(value; context="element-string",collect_all
     end
 end
 
-# URL handling deliberately does not implement the WHATWG URL algorithm.
+# Offline HTTP(S) lexical/authority compatibility. Malformed percent/UTF-8 and
+# raw GS1 dot-path payloads stay strict; this is not a complete UTS46 implementation.
 _gs1_percent_fail() = _gs1_fail("GS1 URI must use valid percent-encoding and UTF-8","GS1_INVALID_PERCENT_ENCODING")
 _gs1_hex(b) = UInt8('0') <= b <= UInt8('9') ? Int(b)-48 : UInt8('a') <= b <= UInt8('f') ? Int(b)-87 : UInt8('A') <= b <= UInt8('F') ? Int(b)-55 : -1
 function _gs1_decode(value; form=false)
@@ -440,68 +441,152 @@ function _gs1_ipv6(value)
     end
     false
 end
-_gs1_host_fail() = _gs1_fail("Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials","GS1_DIGITAL_LINK_UNSUPPORTED_HOST")
+_gs1_host_fail() = _gs1_fail("Unsupported host profile; use an ASCII URL host or RFC IPv6","GS1_DIGITAL_LINK_UNSUPPORTED_HOST")
+function _gs1_ipv4_number(value)
+    isempty(value) && return -1
+    radix=10
+    if startswith(lowercase(value),"0x")
+        radix=16; value=value[3:end]
+    elseif ncodeunits(value)>=2 && startswith(value,"0")
+        radix=8; value=value[2:end]
+    end
+    number=0
+    for byte in codeunits(value)
+        digit=_gs1_hex(byte)
+        0 <= digit < radix || return -1
+        # Bounded accumulation: never overflow, even for very long input.
+        if number < 0x100000000
+            number=number > div(0xffffffff-digit,radix) ? 0x100000000 : number*radix+digit
+        end
+    end
+    number
+end
+function _gs1_normalize_ipv4(host)
+    parts=split(host,'.';keepempty=true)
+    length(parts)>1 && isempty(last(parts)) && pop!(parts)
+    tail=last(parts)
+    !_gs1_digits(tail) && _gs1_ipv4_number(tail)<0 && return host
+    length(parts)<=4 || _gs1_host_fail()
+    numbers=[_gs1_ipv4_number(p) for p in parts]
+    all(n -> 0 <= n <= 0xffffffff,numbers) || _gs1_host_fail()
+    all(n -> n<=255,numbers[1:end-1]) || _gs1_host_fail()
+    last(numbers) < (Int64(1) << (8*(5-length(numbers)))) || _gs1_host_fail()
+    address=last(numbers)
+    for i in 1:length(numbers)-1
+        address+=numbers[i] << (8*(4-i))
+    end
+    join(((address >> n)&255 for n in (24,16,8,0)),'.')
+end
+function _gs1_ipv6_groups(side)
+    groups=Int[]
+    isempty(side) && return groups
+    for part in split(side,':')
+        if occursin('.',part)
+            bytes=parse.(Int,split(part,'.'))
+            push!(groups,(bytes[1]<<8)|bytes[2],(bytes[3]<<8)|bytes[4])
+        else
+            push!(groups,parse(Int,part;base=16))
+        end
+    end
+    groups
+end
+function _gs1_normalize_ipv6(address)
+    sides=split(address,"::";keepempty=true); groups=_gs1_ipv6_groups(sides[1])
+    if length(sides)==2
+        right=_gs1_ipv6_groups(sides[2]); append!(groups,zeros(Int,8-length(groups)-length(right)));append!(groups,right)
+    end
+    best_start,best_size,at=0,1,1
+    while at<=8
+        if groups[at]!=0;at+=1;continue;end
+        start=at
+        while at<=8 && groups[at]==0;at+=1;end
+        if at-start>best_size;best_start=start;best_size=at-start;end
+    end
+    pieces=[string(g;base=16) for g in groups]
+    best_start==0 && return join(pieces,':')
+    join(pieces[1:best_start-1],':')*"::"*join(pieces[best_start+best_size:end],':')
+end
+function _gs1_url_encode(value;userinfo=false)
+    out=IOBuffer()
+    for c in value
+        escaped=c<=' ' || c>='\x7f' || c in (userinfo ? "\"#/:;<=>?@[\\]^`{|}" : "\"#<>?^`{}")
+        if escaped
+            for byte in codeunits(string(c));print(out,'%',uppercase(string(byte;base=16,pad=2)));end
+        else
+            print(out,c)
+        end
+    end
+    String(take!(out))
+end
 function _gs1_authority(value,scheme)
-    1 <= ncodeunits(value) <= 1024 && isascii(value) && !occursin('@',value) && !occursin('%',value) || _gs1_host_fail()
-    host=""; port=nothing
+    1 <= ncodeunits(value) <= 1024 || _gs1_host_fail()
+    userinfo=""; at=findlast('@',value)
+    if at!==nothing
+        raw=value[1:prevind(value,at)];_gs1_decode(raw)
+        pair=split(raw,':';limit=2,keepempty=true)
+        username=_gs1_url_encode(pair[1];userinfo=true)
+        password=length(pair)==1 ? "" : _gs1_url_encode(pair[2];userinfo=true)
+        if !isempty(username) || !isempty(password)
+            userinfo=username*(isempty(password) ? "" : ":"*password)*"@"
+        end
+        value=value[nextind(value,at):end]
+    end
+    host="";port=nothing
     if startswith(value,"[")
-        close=findfirst(']',value); close === nothing && _gs1_host_fail()
-        address=value[2:close-1]; _gs1_ipv6(address) || _gs1_host_fail()
-        host="["*lowercase(address)*"]"
+        close=findfirst(']',value);close===nothing && _gs1_host_fail()
+        address=value[2:prevind(value,close)];_gs1_ipv6(address) || _gs1_host_fail()
+        host="["*_gs1_normalize_ipv6(address)*"]"
         tail=value[close+1:end]
         if !isempty(tail)
-            startswith(tail,":") || _gs1_host_fail()
-            port=tail[2:end]
+            startswith(tail,":") || _gs1_host_fail();port=tail[2:end]
         end
     else
         parts=split(value,':';limit=2,keepempty=true)
-        host=lowercase(parts[1]); length(parts)==2 && (port=parts[2])
-        dns=endswith(host,".") ? host[1:end-1] : host
-        1 <= ncodeunits(dns) <= 253 || _gs1_host_fail()
-        labels=split(dns,'.';keepempty=true)
-        for label in labels
-            1 <= ncodeunits(label) <= 63 || _gs1_host_fail()
-            alnum(c)='a' <= c <= 'z' || '0' <= c <= '9'
-            alnum(first(label)) && alnum(last(label)) && all(c -> alnum(c) || c=='-',label) || _gs1_host_fail()
-        end
-        tail=last(labels)
-        hexnumber=startswith(tail,"0x") && all(b -> _gs1_hex(b)>=0,codeunits(tail)[3:end])
-        (_gs1_digits(tail) || hexnumber) && !_gs1_ipv4(host) && _gs1_host_fail()
+        host=_gs1_decode(parts[1]);length(parts)==2 && (port=parts[2])
+        # Julia Base/Base64 have no UTS46/IDNA service. Do not implement partial IDNA.
+        !isempty(host) && all(c -> ' ' < c < '\x7f' && !(c in "#%/:<>?@[\\]^|"),host) || _gs1_host_fail()
+        host=_gs1_normalize_ipv4(lowercase(host))
     end
-    if port !== nothing
-        1 <= ncodeunits(port) <= 5 && _gs1_digits(port) || _gs1_fail("GS1 port must contain decimal digits from 0 to 65535","GS1_DIGITAL_LINK_INVALID_URI")
-        number=parse(Int,port)
-        number <= 65535 || _gs1_fail("GS1 port must be from 0 to 65535","GS1_DIGITAL_LINK_INVALID_URI")
-        if !((scheme=="http" && number==80) || (scheme=="https" && number==443))
-            host *= ":"*string(number)
+    if port!==nothing && !isempty(port)
+        _gs1_digits(port) || _gs1_fail("GS1 port must contain decimal digits from 0 to 65535","GS1_DIGITAL_LINK_INVALID_URI")
+        number=0
+        for c in port
+            number=number*10+Int(c)-48
+            number<=65535 || _gs1_fail("GS1 port must be from 0 to 65535","GS1_DIGITAL_LINK_INVALID_URI")
         end
+        if !((scheme=="http" && number==80) || (scheme=="https" && number==443));host*=":"*string(number);end
     end
-    host
+    userinfo*host
 end
 struct _GS1Url
     scheme::String
     authority::String
     path::String
     query::Union{Nothing,String}
+    empty_fragment::Bool
 end
 _gs1_base(url::_GS1Url) = url.scheme*"://"*url.authority
 function _gs1_url(value)
     s=_gs1_text(value,"GS1 Digital Link URI")
-    occursin('#',s) && _gs1_fail("GS1 Digital Link URI must not include a fragment","GS1_DIGITAL_LINK_FRAGMENT_NOT_ALLOWED")
-    any(c -> c<=' ' || c=='\x7f' || c=='\\',s) && _gs1_fail("GS1 URI must be absolute http or https without whitespace or backslashes","GS1_DIGITAL_LINK_INVALID_URI")
-    found=match(r"(?i)^(https?)://([^/?]*)([^?]*)(?:\?(.*))?$",s)
-    found === nothing && _gs1_fail("GS1 URI must be an absolute http or https URL","GS1_DIGITAL_LINK_INVALID_URI")
-    scheme=lowercase(found.captures[1]); authority=_gs1_authority(found.captures[2],scheme)
-    path=String(found.captures[3]); query=found.captures[4] === nothing ? nothing : String(found.captures[4])
-    for part in _gs1_split(path,'/',2GS1_MAX_ELEMENTS+1)
-        _gs1_decode(part)
+    occursin('\0',s) && _gs1_fail("GS1 URI must not contain raw NUL","GS1_DIGITAL_LINK_INVALID_URI")
+    s=replace(strip(c->c<=' ',s),'\t'=>"",'\n'=>"",'\r'=>"")
+    fragment=findfirst('#',s);empty_fragment=fragment!==nothing
+    if empty_fragment
+        fragment==lastindex(s) || _gs1_fail("GS1 Digital Link URI must not include a fragment","GS1_DIGITAL_LINK_FRAGMENT_NOT_ALLOWED")
+        s=s[1:prevind(s,fragment)]
     end
-    if query !== nothing
-        for pair in _gs1_split(query,'&',GS1_MAX_ELEMENTS)
-            _gs1_query_pair(pair)
-        end
+    # A literal query backslash is data; only authority/path backslashes repair.
+    parts=split(s,'?';limit=2,keepempty=true)
+    head=replace(parts[1],'\\'=>'/');query=length(parts)==1 ? nothing : String(parts[2])
+    found=match(r"(?i)^(https?):/*([^/]*)(.*)$",head)
+    found===nothing && _gs1_fail("GS1 URI must be an absolute http or https URL","GS1_DIGITAL_LINK_INVALID_URI")
+    scheme=lowercase(found.captures[1]);authority=_gs1_authority(found.captures[2],scheme)
+    path=_gs1_url_encode(found.captures[3])
+    for part in _gs1_split(path,'/',2GS1_MAX_ELEMENTS+1);_gs1_decode(part);end
+    if query!==nothing
+        for pair in _gs1_split(query,'&',GS1_MAX_ELEMENTS);_gs1_query_pair(pair);end
     end
-    _GS1Url(scheme,authority,path,query)
+    _GS1Url(scheme,authority,path,query,empty_fragment)
 end
 function _gs1_primary(ai)
     ai isa AbstractString && ai in _GS1_PRIMARY || _gs1_fail("GS1 primary_ai must be one of 00, 01, or 414")
@@ -550,7 +635,7 @@ function create_gs1_digital_link(elements; base_url=nothing,primary_ai="01",path
     primary=_gs1_primary(primary_ai)
     base_url === nothing && _gs1_fail("GS1 Digital Link base_url is required")
     base=_gs1_url(base_url)
-    base.query === nothing || _gs1_fail("GS1 Digital Link base_url must not include query components")
+    (base.query === nothing || isempty(base.query)) || _gs1_fail("GS1 Digital Link base_url must not include query components")
     paths=nothing
     if path_ais !== nothing
         paths=Set{String}()
@@ -589,6 +674,7 @@ function create_gs1_digital_link(elements; base_url=nothing,primary_ai="01",path
     for (i,e) in enumerate(query)
         print(out,i==1 ? '?' : '&',_gs1_encode(e.ai;form=true),'=',_gs1_encode(e.value;form=true))
     end
+    base.empty_fragment && print(out,'#')
     _gs1_text(String(take!(out)),"GS1 Digital Link output")
 end
 function _gs1_parse_link(url,primary_ai,unknown_query)

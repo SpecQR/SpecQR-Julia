@@ -61,25 +61,31 @@ Exceptions from caller-provided custom iterators are not swallowed.
 
 `create_gs1_digital_link`, `parse_gs1_digital_link`,
 `validate_gs1_digital_link`, and `normalize_gs1_digital_link` never fetch URLs.
-They use an intentionally strict profile, not universal WHATWG URL or IDNA
-normalization:
+The offline HTTP(S) adapter restores browser-compatible lexical/authority
+acceptance without changing ordinary QR generation. It is not a complete WHATWG
+or UTS46/IDNA implementation:
 
-* Absolute `http://` or `https://` only; no raw whitespace, control bytes,
-  backslashes, fragments (including an empty fragment), or user credentials
-* ASCII DNS labels of at most 63 bytes, full name at most 253 bytes; letters,
-  digits and internal hyphens only. DNS case is lowered; a DNS trailing dot is
-  retained
-* Canonical four-component decimal IPv4 only. Integer, short, octal,
-  hexadecimal, leading-zero and trailing-dot IPv4 aliases are rejected. This
-  includes `0x`, `0X`, `1.0x`, `example.0x`, `0x.`, `1.0X`, and `1.2.3.0x`
-* Bracketed RFC IPv6, including canonical dotted-decimal IPv4 tails, is accepted;
-  hexadecimal case is lowered. IPv6 is validated without DNS or socket access,
-  and is not recompressed. Zone IDs and percent-encoded hosts are rejected
-* Ports must have 1–5 decimal digits and be 0–65535; default HTTP/HTTPS ports
-  are omitted and other ports rendered in decimal
-* Percent escapes and decoded UTF-8 are strict throughout path and query.
-  Unicode resolver-prefix and unknown-query data preserve exact UTF-8, with no
-  Unicode normalization or surrogate replacement
+* Missing/excess HTTP(S) slashes, edge ASCII whitespace, and authority/path
+  backslashes are repaired. Query backslashes remain literal payload bytes
+* Empty fragments are accepted; builders preserve a trailing empty `#`, while
+  normalization omits it. Nonempty fragments remain rejected. Empty builder
+  base queries are accepted; nonempty base queries remain rejected
+* Credentials are serialized with URL userinfo escaping, with original valid
+  percent escapes retained. Error messages do not echo credentials
+* ASCII percent-encoded hosts and URL reg-names are accepted. Numeric IPv4
+  integer/short/octal/hexadecimal aliases are canonicalized with checked bounded
+  accumulation. Six legacy bare-hex hosts now accept; `example.0x` still rejects
+* Bracketed RFC IPv6 is validated and normalized to lowercase hex, compressing
+  the first longest zero run; embedded dotted IPv4 is serialized as hex groups
+* Empty ports are omitted; decimal ports are range-checked incrementally and
+  default HTTP/HTTPS ports are omitted. Arbitrarily long leading zeros cannot
+  overflow the parser
+* Percent escapes and decoded UTF-8 remain strict. Julia retains its existing
+  lossless decoded-NUL unknown-query contract, unlike the GDScript host profile.
+  Raw NUL input remains rejected. Ordinary QR text and binary NUL remain supported
+* Unicode/IDNA hosts remain unsupported: the supported Julia Base/Base64 runtime
+  has no UTS46 mapping service. Unicode normalization alone is insufficient and
+  no fake partial IDNA implementation or added runtime dependency is included
 
 Primary AIs are `00`, `01` (builder default), and `414`. Qualifiers `10`, `21`,
 `22` can appear in the path only after `01`. Other supported AIs are query data.
@@ -93,7 +99,8 @@ The builder normalizes resolver-prefix dot segments, then rejects any surviving
 prefix component that decodes once to a primary AI, including `%30%31`. This
 prevents generated links from having an ambiguous payload start. Primary-looking
 components removed by preceding dot normalization are allowed. Other prefix
-components, including existing escapes and raw UTF-8, are preserved.
+components preserve existing escapes; raw non-ASCII path text is UTF-8 percent
+encoded during URL serialization.
 
 Query decoding uses form semantics (`+` is a space), with strict percent/UTF-8
 validation. `unknown_query="preserve"` retains non-GS1 keys, duplicates, order,
@@ -117,3 +124,37 @@ Text is valid UTF-8 and at most 1,000,000 UTF-16 code units (with a preliminary
 1,000,000 bytes; valid AI/value text is ASCII. Element and query pair counts are
 limited to 16,384, and path component counts to 32,769. Limits are checked before
 unbounded iteration, numeric parsing, or large output growth.
+
+## Source-bound compatibility evidence
+
+`verification/fixtures/gs1-upstream.json` retains all 1,411 historical requests
+and assertions. The current TypeScript oracle is independently pinned to
+`SpecQR/SpecQR@16efc6c0a8e397c9df3d051d20fce6c1eebdfad7`. The immutable Julia
+baseline is `SpecQR-Julia@ffb95d10cd1c585421cb3a52a43a9e657d000a29`, freshly run
+on both Julia lanes. Baseline classifications are 1,167 aligned, 131 diagnostic
+only, 108 narrower acceptances, two safe query-dot acceptances and three IPv6
+output differences. All 80 source-bound positive targets now match TypeScript.
+The remaining 164 differences are 131 diagnostic, 31 narrower acceptances and
+two safe query-dot successes. The 31 comprise 17 strict malformed-percent/UTF-8
+cases, 12 unsupported Unicode hosts and two context-primary cases. There are no
+remaining accepted-output differences in this corpus.
+
+Four validation precedence migrations (930, 1038, 1056, 1269) use independent
+published-Julia semantic witnesses; there is no candidate-derived expected
+output. NUL successes 1331–1333 and native NUL diagnostic 1359 remain unchanged.
+The original shared 49 Digital Link/authority operations and all 102 FNC1
+percent vectors remain checked. See `url-compatibility.ja.md` for assertion
+migration and scope details. Diagnostic comparisons retain exact code/reason/
+count and all payload fields; wording, optional null fields and auxiliary
+error context are retained in transcripts but excluded from contract comparison.
+
+### Additional bounded-profile limits outside the 1,411-request corpus
+
+The inherited builder resolver-prefix cleanup collapses empty path segments
+(e.g. a base `/a//b` becomes `/a/b`). ASCII `xn--` labels are treated as opaque
+reg-names; there is no IDNA/ACE validity check, so invalid ACE labels such as
+`xn--a` and `xn--` can be accepted even though TypeScript rejects them. These
+are separately documented limitations, not claims of complete URL parity and
+not included in the 164 corpus differences. Blanket rejection of all ACE hosts
+would incorrectly reject valid punycode domains. Malformed Unicode inside
+bracketed IPv6 is rejected through `InvalidGs1Error`, including multibyte suffixes.

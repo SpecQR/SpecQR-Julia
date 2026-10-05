@@ -1,0 +1,969 @@
+{
+  "sourceCommit": "ffb95d10cd1c585421cb3a52a43a9e657d000a29",
+  "cases": [
+    {
+      "id": "bare-hex-ipv4-1:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-1:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://0x/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-1:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-2:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://0X/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-2:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://0X/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-2:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://0X/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-3:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://1.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-3:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://1.0x/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-3:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://1.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-4:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-4:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.0x/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-4:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-5:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://0x./01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-5:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://0x./01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-5:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://0x./01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-6:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://1.0X/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-6:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://1.0X/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-6:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://1.0X/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-7:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://1.2.3.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-7:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://1.2.3.0x/01/09506000134352"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+            "count": null,
+            "elementIndex": null,
+            "expected": "ASCII DNS name, canonical dotted IPv4, or RFC IPv6",
+            "key": null,
+            "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials",
+            "offset": null,
+            "reason": "unsupported-host",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "bare-hex-ipv4-7:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://1.2.3.0x/01/09506000134352"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_DIGITAL_LINK_UNSUPPORTED_HOST",
+          "message": "Unsupported host profile; use ASCII DNS, canonical dotted IPv4, or RFC IPv6 without credentials"
+        }
+      }
+    },
+    {
+      "id": "builder-dot-path:linkCreate",
+      "request": {
+        "op": "linkCreate",
+        "elements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          },
+          {
+            "ai": "10",
+            "value": "."
+          }
+        ],
+        "options": {
+          "baseUrl": "https://example.com"
+        }
+      },
+      "expected": "https://example.com/01/04912345678904?10=."
+    },
+    {
+      "id": "builder-parent-path:linkCreate",
+      "request": {
+        "op": "linkCreate",
+        "elements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          },
+          {
+            "ai": "10",
+            "value": ".."
+          }
+        ],
+        "options": {
+          "baseUrl": "https://example.com"
+        }
+      },
+      "expected": "https://example.com/01/04912345678904?10=.."
+    },
+    {
+      "id": "raw-dot-0:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-0:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/."
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-0:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-1:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/.."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-1:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/.."
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-1:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/.."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-2:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/%2e"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-2:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/%2e"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-2:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/%2e"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-3:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/%2E%2e"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-3:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/%2E%2e"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-3:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/%2E%2e"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-4:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/.%2E"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-4:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/.%2E"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-4:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/.%2E"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-5:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904/10/%2e."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "raw-dot-5:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904/10/%2e."
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "raw-dot-5:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904/10/%2e."
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "erased-first-primary:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/./../01/04912345678904"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "erased-first-primary:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/./../01/04912345678904"
+      },
+      "expected": {
+        "errors": [
+          {
+            "ai": null,
+            "code": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+            "count": null,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "GS1 Digital Link path values must not be dot segments; place these values in the query",
+            "offset": null,
+            "reason": "invalid-digital-link-placement",
+            "value": null
+          }
+        ],
+        "ok": false,
+        "result": null,
+        "warnings": []
+      }
+    },
+    {
+      "id": "erased-first-primary:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/./../01/04912345678904"
+      },
+      "expected": {
+        "throws": {
+          "code": "INVALID_GS1",
+          "detailCode": "GS1_INVALID_DIGITAL_LINK_PLACEMENT",
+          "message": "GS1 Digital Link path values must not be dot segments; place these values in the query"
+        }
+      }
+    },
+    {
+      "id": "query-dot-preservation:linkParse",
+      "request": {
+        "op": "linkParse",
+        "input": "https://example.com/01/04912345678904?10=..&21=.&utm=a&utm=b"
+      },
+      "expected": {
+        "elements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          },
+          {
+            "ai": "10",
+            "value": ".."
+          },
+          {
+            "ai": "21",
+            "value": "."
+          }
+        ],
+        "pathElements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          }
+        ],
+        "primary": {
+          "ai": "01",
+          "value": "04912345678904"
+        },
+        "queryElements": [
+          {
+            "ai": "10",
+            "value": ".."
+          },
+          {
+            "ai": "21",
+            "value": "."
+          }
+        ],
+        "unknownQuery": [
+          {
+            "key": "utm",
+            "value": "a"
+          },
+          {
+            "key": "utm",
+            "value": "b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "query-dot-preservation:linkValidate",
+      "request": {
+        "op": "linkValidate",
+        "input": "https://example.com/01/04912345678904?10=..&21=.&utm=a&utm=b"
+      },
+      "expected": {
+        "errors": [],
+        "ok": true,
+        "result": {
+          "elements": [
+            {
+              "ai": "01",
+              "value": "04912345678904"
+            },
+            {
+              "ai": "10",
+              "value": ".."
+            },
+            {
+              "ai": "21",
+              "value": "."
+            }
+          ],
+          "pathElements": [
+            {
+              "ai": "01",
+              "value": "04912345678904"
+            }
+          ],
+          "primary": {
+            "ai": "01",
+            "value": "04912345678904"
+          },
+          "queryElements": [
+            {
+              "ai": "10",
+              "value": ".."
+            },
+            {
+              "ai": "21",
+              "value": "."
+            }
+          ],
+          "unknownQuery": [
+            {
+              "key": "utm",
+              "value": "a"
+            },
+            {
+              "key": "utm",
+              "value": "b"
+            }
+          ]
+        },
+        "warnings": [
+          {
+            "ai": null,
+            "code": "GS1_DIGITAL_LINK_UNKNOWN_QUERY_PRESERVED",
+            "count": 2,
+            "elementIndex": null,
+            "expected": null,
+            "key": null,
+            "message": "Non-GS1 query parameters are preserved",
+            "offset": null,
+            "reason": "unknown-query-preserved",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "query-dot-preservation:linkNormalize",
+      "request": {
+        "op": "linkNormalize",
+        "input": "https://example.com/01/04912345678904?10=..&21=.&utm=a&utm=b"
+      },
+      "expected": "https://example.com/01/04912345678904?10=..&21=.&utm=a&utm=b"
+    },
+    {
+      "id": "literal-percent2e-value:linkCreate",
+      "request": {
+        "op": "linkCreate",
+        "elements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          },
+          {
+            "ai": "10",
+            "value": "%2e"
+          }
+        ],
+        "options": {
+          "baseUrl": "https://example.com"
+        }
+      },
+      "expected": "https://example.com/01/04912345678904/10/%252e"
+    },
+    {
+      "id": "safe-base-normalization:linkCreate",
+      "request": {
+        "op": "linkCreate",
+        "elements": [
+          {
+            "ai": "01",
+            "value": "04912345678904"
+          }
+        ],
+        "options": {
+          "baseUrl": "https://example.com/a/../b"
+        }
+      },
+      "expected": "https://example.com/b/01/04912345678904"
+    }
+  ]
+}
