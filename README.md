@@ -1,5 +1,7 @@
 # SpecQR Julia
 
+A from-scratch QR Code Model 2 encoder in Julia, using only Julia Base and the bundled Base64 standard library at runtime.
+
 日本語 | [English](README.en.md) | [日本語の使い方](docs/getting-started.ja.md)
 
 Julia でフルスクラッチ実装した QR Code Model 2 エンコーダーです。
@@ -43,7 +45,7 @@ Julia の `write` は同名ファイルを上書きします。上書きを避�
 - Version 1–40、誤り訂正 L / M / Q / H、8 マスクと自動選択
 - 数字、英数字、UTF-8 テキスト、任意のバイト列、漢字モード
 - 文字数フィールドと version の範囲を考慮した混在モードの最適化
-- ECI、FNC1 第1 / 第2位置、手動セグメント
+- ECI、FNC1 第 1 / 第 2 位置、手動セグメント
 - GS1 element string、チェックディジット、限定 AI カタログ、Digital Link
 - Structured Append の分割、parity、計画、完全性を確認した再結合
 - 純 Julia による SVG、PNG、RGBA pixels、data URL
@@ -66,7 +68,7 @@ julia --startup-file=no bin/specqr.jl --help
 `--input FILE` はファイル、`--stdin` は標準入力を読みます。
 ファイル / 標準入力に `--binary` を付けると生バイトとして扱います。
 テキストの改行、末尾の改行、NUL を勝手に削除せず、不正な UTF-8 は拒否します。
-入力元は1つだけ指定してください。出力先が存在する場合は `--force` なしでは上書きせず、
+入力元は 1 つだけ指定してください。出力先が存在する場合は `--force` なしでは上書きせず、
 シンボリックリンクを出力先にすることも拒否します。詳細は
 [CLI の使い方](docs/getting-started.ja.md#cli-の使い方)を参照してください。
 
@@ -76,9 +78,9 @@ julia --startup-file=no bin/specqr.jl --help
 実際に検証済みなのは **Linux x86_64 / Julia 1.10.12 LTS・1.13.1 stable** です。
 両版で 92,637 件の単体チェックと 10,186 件の参照ケース、独立デコーダーによる
 画像検証、CLI、別プロジェクトからの利用を確認しています。
-[CI](https://github.com/SpecQR/SpecQR-Julia/actions)で各コミットの結果を確認できます。
+[CI](https://github.com/SpecQR/SpecQR-Julia/actions) で各コミットの結果を確認できます。
 
-**Windows、macOS、その他のアーキテクチャ、32-bit は未検証です。**
+**Windows、macOS、その他のアーキテクチャ、32 bit は未検証です。**
 特に日本語ファイル名、標準入出力のバイト保持、出力ファイルの排他的作成、
 パッケージ利用は、それぞれの OS で実行するまで検証済みとは扱いません。
 
@@ -88,7 +90,7 @@ julia --startup-file=no bin/specqr.jl --help
   Unicode 正規化は行いません。任意のバイト列は `UInt8` 配列で渡せます。
 - ECI はバイトの解釈を示すラベルであり、文字コードを変換しません。
   テキストの byte セグメントは常に UTF-8 です。
-- 行列は `matrix[y, x]`、`module_at(qr, x, y)` は1始まりです。
+- 行列は `matrix[y, x]`、`module_at(qr, x, y)` は 1 始まりです。
   QR のマスク番号は 0–7、Structured Append の公開部番号は 1–16 です。
 - 入力や出力に資源上限があります。入力は通常最大 1,000,000 文字またはバイト、
   手動セグメントは最大 16,384 個、単一シンボルの厳密な最適化は最大 7,089 Unicode scalar です。
@@ -102,10 +104,10 @@ julia --startup-file=no bin/specqr.jl --help
 
 - [日本語の使い方](docs/getting-started.ja.md): 導入、画像生成、GS1、分割、CLI、エラー対応
 - [English README](README.en.md)
-- [API の詳細（英語）](docs/native-api.md)、[API 概要（英語）](docs/api.md)
-- [GS1 / Digital Link の範囲（英語）](docs/gs1.md)、[描画とサイズ（英語）](docs/rendering.md)
-- [検証方法（英語）](docs/verification.md)、[OS ごとの検証手順（英語）](docs/native-platform-validation.md)
-- [CI の構成（英語）](docs/ci.md)
+- [API の詳細](docs/native-api.md)、[API 概要](docs/api.md)
+- [GS1 / Digital Link の範囲](docs/gs1.md)、[描画とサイズ](docs/rendering.md)
+- [検証方法](docs/verification.md)、[OS ごとの検証手順](docs/native-platform-validation.md)
+- [CI の構成](docs/ci.md)
 
 ```sh
 julia --startup-file=no --project=. test/runtests.jl

@@ -1,16 +1,7 @@
 # Contributing
 
-Keep runtime dependencies limited to Julia Base and bundled Base64. New package
-or JLL dependencies, foreign QR implementations and network runtime resources
-are out of scope. Match strict UTF-8 and arbitrary binary-byte contracts.
+runtime の依存関係は Julia Base と同梱の Base64 に限定してください。新たな package や JLL への依存、外部の QR 実装、runtime で使うネットワークリソースは対象外です。厳密な UTF-8 と任意のバイナリバイト列の契約を維持してください。
 
-Run the complete native suite and the pinned reference corpus on Julia stable
-and LTS. Add regression tests for failures; use actual native execution rather
-than interpreting, transpiling, or emulating Julia. Keep optional decoder tools
-outside runtime dependencies. Test source-level public APIs, not only the JSON
-adapter. Regenerate the source manifest only after review, then re-run the
-source-bound native harness against the exact source archive.
+Julia stable と LTS で、完全な native suite と固定した参照 corpus を実行してください。失敗には回帰テストを追加し、Julia を別の処理系で解釈・変換・エミュレートせず、実際の native 実行を使ってください。任意の decoder tools は runtime の依存関係に含めないでください。JSON adapter だけでなく、ソースの公開 API もテストしてください。source manifest はレビュー後にのみ再生成し、その正確な source archive を対象に、source と結び付いた native harness を再実行してください。
 
-Do not claim platform support from a cross-compiler, container architecture
-label, compatibility layer, or a script that did not run the intended Julia
-runtime. Native execution reports describe only their actual OS/architecture.
+cross-compiler、container の architecture label、互換レイヤー、意図した Julia runtime を実行していない script を根拠に、platform 対応を主張しないでください。native 実行の report は、実際に使った OS/architecture だけを説明します。

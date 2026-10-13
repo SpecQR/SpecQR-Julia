@@ -4,7 +4,7 @@
 
 このガイドは、ソースを取得して最初の QR を生成するまでと、よく使う機能を説明します。
 API 名、キーワード引数、CLI オプションは翻訳せず、そのまま入力してください。
-詳細な全オプションは [API 仕様（英語）](native-api.md)を参照してください。
+詳細な全オプションは [API 仕様](native-api.md)を参照してください。
 
 ## 1. ソースを読み込む
 
@@ -58,7 +58,7 @@ println(qr.version, " / ", qr.error_correction_level, " / ", qr.mask_pattern)
 
 - `error_correction_level` は `"L"` / `"M"` / `"Q"` / `"H"` です。
   誤り訂正を強くすると同じ version に入るデータ量は減ります。
-- `scale` は1モジュールあたりの pixels、`margin` は周囲の余白をモジュール単位で指定します。
+- `scale` は 1 モジュールあたりの pixels、`margin` は周囲の余白をモジュール単位で指定します。
   既定値は `scale=8`、`margin=4`、黒と白です。
 - `to_svg` は文字列、`to_png` は `Vector{UInt8}` を返します。
   Julia の `write` は同名ファイルを上書きするので、保存先には注意してください。
@@ -105,7 +105,7 @@ link = create_gs1_digital_link(items; base_url="https://id.gs1.org")
 parsed = parse_gs1_digital_link(link)
 ```
 
-`gs1=true` は element string を検証し、FNC1 第1位置を付けます。
+`gs1=true` は element string を検証し、FNC1 第 1 位置を付けます。
 AI 値は許可された printable ASCII の範囲で、値に括弧や ASCII GS を直接入れられません。
 可変長フィールドの区切りはヘルパーに任せてください。
 上の `%` は文字そのものとして保持されます。
@@ -113,10 +113,10 @@ AI 値は許可された printable ASCII の範囲で、値に括弧や ASCII GS
 一方、低水準の手動 FNC1 英数字セグメントは QR のエスケープ表現をそのまま受け取り、
 `%` は区切り、`%%` は文字の `%` を意味します。高水準 API と混同しないでください。
 
-GS1 は限定した50種の AI カタログを対象とし、全仕様の検証や認証ではありません。
+GS1 は限定した 50 種の AI カタログを対象とし、全仕様の検証や認証ではありません。
 Digital Link も厳密な ASCII authority プロファイルで、URL を取得せずに処理します。
-日付は6桁の表現を確認しますが、実在する暦日かどうかまでは確認しません。
-詳しくは [GS1 の仕様と制限（英語）](gs1.md)を参照してください。
+日付は 6 桁の表現を確認しますが、実在する暦日かどうかまでは確認しません。
+詳しくは [GS1 の仕様と制限](gs1.md)を参照してください。
 
 ## 5. Structured Append で分割する
 
@@ -128,8 +128,8 @@ end
 println(parts.total, " / ", parts.parity)
 ```
 
-2–16個の QR に分割します。1個に収まる場合は `generate` を使ってください。
-テキストは Unicode scalar の途中で切りません。公開する部番号は1始まりです。
+2–16 個の QR に分割します。1 個に収まる場合は `generate` を使ってください。
+テキストは Unicode scalar の途中で切りません。公開する部番号は 1 始まりです。
 この高水準の分割 API では GS1 / FNC1 / ECI と組み合わせられません。
 読み取り・再結合には対応したスキャナーやアプリが必要で、一般的なスマートフォンの
 カメラが自動で結合するとは限りません。
@@ -148,13 +148,13 @@ julia --startup-file=no bin/specqr.jl --help
 ```
 
 `入力.txt` は UTF-8、`payload.bin` は生バイトの入力ファイルをあらかじめ用意してください。
-`--text` / `--input` / `--stdin` / `--hex` / 手動 `--segment` の入力元から1つを選びます。
+`--text` / `--input` / `--stdin` / `--hex` / 手動 `--segment` の入力元から 1 つを選びます。
 手動セグメントを使うときだけ `--segment` を複数回指定できます。
 
 テキストを勝手にトリミングしないため、`printf` の例では最後の改行も QR の内容です。
 `--binary` は `--input` または `--stdin` と組み合わせます。
 `--output` の既存ファイルは通常拒否されます。意図して置き換えるときだけ `--force` を付けてください。
-不正なオプションや入力では stderr にエラーを出し、終了コードは2です。
+不正なオプションや入力では stderr にエラーを出し、終了コードは 2 です。
 
 ## エラーと診断
 
@@ -174,10 +174,10 @@ end
 
 ## 次に読むもの
 
-- [API の全体像（英語）](api.md) / [Julia API の詳細（英語）](native-api.md)
-- [描画、色、資源上限（英語）](rendering.md)
-- [検証範囲と実行方法（英語）](verification.md)
-- [Windows / macOS を含むネイティブ検証手順（英語）](native-platform-validation.md)
+- [API の全体像](api.md) / [Julia API の詳細](native-api.md)
+- [描画、色、資源上限](rendering.md)
+- [検証範囲と実行方法](verification.md)
+- [Windows / macOS を含むネイティブ検証手順](native-platform-validation.md)
 
-現時点で日本語になっているのは README とこの入門ガイドです。
-詳細仕様、CLI の `--help` とエラーメッセージは英語です。
+README、この入門ガイド、詳細仕様は日本語を中心に記述しています。
+CLI の `--help` とエラーメッセージは英語です。

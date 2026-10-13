@@ -2,7 +2,7 @@
 
 [日本語](README.md) | English | [日本語の使い方](docs/getting-started.ja.md)
 
-A from-scratch QR Model 2 encoder implemented in Julia. Runtime dependencies are
+A from-scratch QR Code Model 2 encoder implemented in Julia. Runtime dependencies are
 Julia Base and the bundled Base64 standard library only. No external packages,
 JLL artifacts, FFI, QR wrappers, runtime downloads, or network services.
 
