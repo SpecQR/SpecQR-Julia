@@ -1,47 +1,16 @@
 # Linux continuous integration
 
-The workflow runs the existing source-bound verifiers on real GitHub-hosted
-Ubuntu 24.04 x86-64 runners, with official Julia **1.10.12 LTS** and **1.13.1
-stable** Linux binaries pinned by SHA-256. No Windows, macOS or other-architecture
-pass is implied. A workflow definition or local rehearsal is not a remote CI
-pass: inspect the checks on the exact published commit.
+workflow は、実際の GitHub-hosted Ubuntu 24.04 x86-64 runners で、既存の source に結び付いた verifiers を実行します。公式 Julia の **1.10.12 LTS** と **1.13.1 stable** の Linux binaries を SHA-256 で固定して使用します。Windows、macOS、ほかの architecture での成功を意味しません。workflow の定義やローカルでの予行実行は、リモート CI の成功ではありません。公開した正確な commit の checks を確認してください。
 
-Both lanes run the native unit suite (92,637 checks in the reviewed baseline),
-10,186 golden requests including 2,400 independent Nayuki matrices, all 27 CLI
-checks, clean offline Pkg and separate direct-include consumers, and 38 harness
-self-tests. They also run ZXing-C++ 3.1.1 actual PNG decoding, ZXing Java 3.5.4
-PNG and matrix decoding, librsvg SVG rasterization/pixel comparison, and shared
-regression checks. Both lanes additionally run the original 1,411 GS1 requests,
-80 independent TypeScript positive targets, all 49 authority/Digital Link
-operations and the fail-closed GS1 harness self-tests. Decoder scales are the existing reviewed defaults (C++ 8,
-Java 3); these results do not assert Java passes the default library scale 8.
+両 lanes は、native unit suite（レビューした baseline で 92,637 checks）、独立した Nayuki matrices 2,400 件を含む golden requests 10,186 件、全 27 CLI checks、クリーンなオフラインの Pkg consumer と別の direct-include consumer、38 harness self-tests を実行します。ZXing-C++ 3.1.1 による実 PNG decode、ZXing Java 3.5.4 による PNG と matrix の decode、librsvg による SVG の raster 化と pixel 比較、共有の回帰検査も実行します。さらに、元の GS1 requests 1,411 件、独立した TypeScript の positive targets 80 件、全 49 authority/Digital Link operations、fail-closed の GS1 harness self-tests を実行します。decoder の scale は、レビュー済みの既存の既定値（C++ 8、Java 3）です。これらの結果は、ライブラリの既定 scale 8 で Java が成功するという主張ではありません。
 
-Only Julia Base and bundled Base64 are package runtime dependencies. CPython,
-ZXing, Pillow, Java and librsvg are verification tools only. PyPI binary wheels
-and the Maven Central ZXing jar have exact version/SHA-256 pins. Ubuntu's
-official apt repositories supply Java 17 and librsvg; their installed versions
-are recorded, not frozen. The Ubuntu runner image and its system Python 3.12
-can receive patches. Julia checksums originate from the official
-[versions feed](https://julialang-s3.julialang.org/bin/versions.json); the exact
-download URL and checksum are retained in each lane. Action commit pins were
-verified through official GitHub release metadata and pinned action definitions
-for actions/checkout v7.0.1 and actions/upload-artifact v7.0.1; both use Node 24. No cache, repository write permission, persistent
-checkout credential, secret or OIDC grant is configured. Artifact upload uses
-GitHub's per-job artifact service; the workflow does not publish releases.
+package の runtime 依存は Julia Base と同梱 Base64 だけです。CPython、ZXing、Pillow、Java、librsvg は検証用 tools に限ります。PyPI binary wheels と Maven Central の ZXing jar は、正確な version/SHA-256 で固定します。Java 17 と librsvg は Ubuntu の公式 apt repositories から導入し、インストールした版を記録しますが、版の固定はしません。Ubuntu runner image と system Python 3.12 には patch が適用される場合があります。Julia の checksums は公式の [versions feed](https://julialang-s3.julialang.org/bin/versions.json) に由来し、各 lane は正確な download URL と checksum を保持します。Action の commit 固定は、actions/checkout v7.0.1 と actions/upload-artifact v7.0.1 の公式 GitHub release metadata と固定した action 定義で確認しています。両方とも Node 24 を使います。cache、repository の書込み権限、永続する checkout credential、secret、OIDC grant は設定していません。artifact upload は GitHub の job ごとの artifact service を使い、workflow は release を公開しません。
 
 ## Source changes and archive identity
 
-CI validates the committed `SOURCE-SHA256.json`; it never silently regenerates
-that manifest. `scripts/prepare_ci.py stage` rejects a missing, additional or
-modified source file, copies exactly the validated inventory into a separate
-temporary directory, rechecks both trees, and creates a deterministic ZIP with
-fixed timestamps, permissions and sorted members. The native verifier runs
-from that copy and checks its archive. CI includes this workflow, CI helper,
-test lockfile and documentation in the manifest, rather than exempting them.
-The historical 52-file release remains a separate immutable artifact.
+CI は commit 済みの `SOURCE-SHA256.json` を検証し、その manifest を黙って再生成することはありません。`scripts/prepare_ci.py stage` は、source file の欠落・追加・変更を拒否し、検証した inventory だけを別の一時ディレクトリへコピーして、両 tree を再検査します。そのうえで、timestamp と permissions を固定し、member を整列した決定的な ZIP を作ります。native verifier はそのコピーから実行し、archive を検査します。CI の manifest は、この workflow、CI helper、test lockfile、文書も含め、除外しません。過去の 52 ファイルの release は、別の不変な artifact として維持します。
 
-When intentionally changing source, review the edits and regenerate the
-manifest explicitly, then include it in the same commit:
+source を意図的に変更するときは、変更をレビューしてから manifest を明示的に再生成し、同じ commit に含めます。
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/prepare_ci.py manifest > /tmp/SpecQR-SOURCE-SHA256.json
@@ -49,25 +18,10 @@ cp /tmp/SpecQR-SOURCE-SHA256.json SOURCE-SHA256.json
 python3 scripts/prepare_ci.py stage --output /tmp/specqr-check
 ```
 
-Use a fresh output directory. Do not generate the temporary manifest inside
-the source tree: it would become an unwanted inventory entry. A digest binds
-evidence to bytes, not publisher authenticity. The current source's manifest
-and archive hashes change after an intentional edit; CI is not permanently
-pinned to the historical release archive hash.
+新しい出力ディレクトリを使ってください。一時的な manifest を source tree 内に生成すると、不要な inventory entry になるため、tree の外で生成してください。digest は証拠を bytes に結び付けるものであり、公開者の真正性を証明しません。意図的な変更の後は、現在の source の manifest と archive hashes が変わります。CI を過去の release archive hash へ恒久的に固定しているわけではありません。
 
 ## Evidence and required checks
 
-Both Julia lanes continue independent checks after a test failure where their
-prerequisites are available. Failed steps are never marked successful.
-Artifacts upload on success or failure, retaining the source archive, commit,
-host/tool versions, reports, complete reference transcripts and process
-receipts. Compiled Julia depots are omitted; the consumer's explicit empty
-registry, Project and Manifest are retained. Evidence paths are original
-runner paths and are preserved as execution provenance. Artifacts expire after
-14 days; retain a downloaded copy if release evidence is needed longer.
+両 Julia lanes は、テストが失敗しても、前提条件が利用できる独立した検査を続けます。失敗した step を成功と表示することはありません。artifact は成功・失敗のどちらでも upload し、source archive、commit、host/tool の版、reports、完全な参照 transcripts、process receipts を保持します。コンパイル済み Julia depots は除外し、consumer の明示的な空 registry、Project、Manifest は保持します。証拠の path は元の runner の path であり、実行の出典として保存します。artifact は 14 日後に期限切れになるため、release の証拠がそれ以上必要な場合は、download したコピーを保持してください。
 
-The `Required Linux checks` aggregate fails if any matrix lane fails, is
-cancelled or is skipped. Select this check in branch protection if desired;
-the workflow alone does not configure repository policy. See
-[native validation](native-platform-validation.md) for exact evidence scope and
-offline limitations. Environment flags are not an OS-level network sandbox.
+`Required Linux checks` の aggregate は、matrix lane のどれかが失敗・取消し・skip になれば失敗します。必要に応じて branch protection でこの check を選択してください。workflow だけで repository policy が設定されるわけではありません。証拠の正確な範囲とオフラインの制限は [native 検証](native-platform-validation.md)を参照してください。環境 flag は OS レベルのネットワーク sandbox ではありません。

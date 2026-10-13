@@ -1,55 +1,31 @@
 # Verification
 
-The package includes deterministic native Julia tests and a pinned compressed
-language-neutral corpus. Verification invokes the actual Julia executable.
-No transpiler, compatibility interpreter, QR wrapper, or remote QR service is
-used to produce candidate results.
+package は、決定的な native Julia tests と、固定した圧縮済みの言語非依存 corpus を含みます。検証は実際の Julia 実行ファイルを呼び出します。候補の結果を生成するために、transpiler、互換 interpreter、QR wrapper、リモートの QR service を使うことはありません。
 
 ## Exact corpus
 
-- 5,610 public operations: 3,028 generation, 1,920 planning, 640 capacity, and
-  22 Structured Append cases
-- 4,576 internal operations: 4,320 raw matrix/codeword/mask cases, all 255
-  Reed–Solomon degrees, and the complete 65,536-entry GF multiplication table
-- 2,400 corpus matrices have independent Nayuki reference agreement
-- Includes every version 1–40, ECC L/M/Q/H, and mask 0–7
+- 公開 API の 5,610 operations: 生成 3,028 件、計画 1,920 件、容量 640 件、Structured Append 22 件
+- 内部の 4,576 operations: raw matrix/codeword/mask の 4,320 件、Reed–Solomon の全 255 次数、全 65,536 項目の GF 乗算表
+- corpus の 2,400 matrices は、独立した Nayuki の参照結果と一致
+- version 1–40、ECC L/M/Q/H、mask 0–7 をすべて含む
 
-`verification/fixtures/manifest.json` pins the compressed files by SHA-256.
-Both compressed corpus files are included, so core verification is offline.
+`verification/fixtures/manifest.json` は、圧縮ファイルを SHA-256 で固定します。圧縮した corpus files は両方とも同梱しているため、core の検証はオフラインで行えます。
 
 ```sh
 julia --startup-file=no --project=. test/runtests.jl
 python3 scripts/verify_reference.py --julia /absolute/path/to/julia --output reference.json
 ```
 
-The verifier checks required fields, row dimensions, matrix hashes, exact
-counts, clean process termination, stream hashes, and source stability. A
-changed source tree invalidates the source-bound run even if comparisons pass.
+verifier は、必須 field、行の寸法、matrix hashes、正確な件数、process の正常終了、stream hashes、source が変更されていないことを検査します。比較が成功しても、source tree が変更された場合は、その source と結び付いた実行結果は無効です。
 
 ## Independent decoding and rendering
 
-Optional development scripts invoke independently installed ZXing-C++ 3.1.1
-and ZXing Java 3.5.4. Every generated PNG is checked with independent CRC,
-DEFLATE, dimensions, and full pixel reconstruction before actual image
-recognition. GS1/FNC1, ECI, Kanji, binary bytes, all modes, masks/ECC combinations,
-and high-level Structured Append are covered. Java also checks SA metadata,
-codeword bytes, and matrix decoding separately from actual-PNG detection.
+任意の開発用 scripts は、独立にインストールした ZXing-C++ 3.1.1 と ZXing Java 3.5.4 を呼び出します。生成した PNG はすべて、独立した CRC、DEFLATE、寸法、全 pixel の再構成を検査してから、実際の画像認識を行います。GS1/FNC1、ECI、Kanji、binary bytes、全 mode、mask/ECC の組合せ、高水準の Structured Append を対象にします。Java では、実 PNG の検出とは別に、SA metadata、codeword bytes、matrix の decode も検査します。
 
-SVG is rasterized by independent librsvg, then every pixel is compared with the
-pure-Julia PNG output; both images are decoded. PNG/SVG data URLs round-trip.
-Decoder/rasterizer/Python libraries are optional verification tools and are
-never included in `Project.toml` runtime dependencies.
+SVG は独立した librsvg で raster 化し、純 Julia による PNG 出力と全 pixel を比較して、両方の画像を decode します。PNG/SVG data URLs は round-trip を確認します。decoder/rasterizer/Python libraries は任意の検証用 tools であり、`Project.toml` の runtime 依存に含めることはありません。
 
-Known scanner limitations must be reported as failures for that specific
-configuration. A successful alternate pixel scale is not evidence that the
-original scale passed. Passing a corpus is not formal standards certification.
+既知の scanner の制限は、その特定の構成での失敗として報告する必要があります。別の pixel scale で成功しても、元の scale で成功した証拠にはなりません。corpus の合格は、正式な規格認証ではありません。
 
 ## Review and native proof
 
-The deliverable records actual versions, commands, source/archive hashes,
-comparison counts, SDK checksums, and test results. Final source is archived
-with deterministic ordering and timestamps. A separate native harness checks
-that archive against the entire source inventory, native executable headers,
-actual OS/architecture, Julia's own runtime identity, unit tests, full corpus,
-CLI control-byte/Unicode I/O, and a clean offline local package consumer.
-See [native validation](native-platform-validation.md).
+成果物には、実際の version、commands、source/archive hashes、比較件数、SDK checksums、テスト結果を記録します。最終 source は、決定的な順序と timestamp で archive にします。別の native harness が、その archive を source inventory 全体と照合し、native 実行ファイルの header、実際の OS/architecture、Julia 自身の runtime 識別情報、unit tests、全 corpus、CLI の制御 byte/Unicode I/O、クリーンなオフラインのローカル package consumer を検査します。[native 検証](native-platform-validation.md)を参照してください。
